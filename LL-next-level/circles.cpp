@@ -7,25 +7,29 @@ class node
 {
 public:
 	int data;
-	bool eol;
+	bool eol,sig;
 	node* next;
-
+	bool visited;
 	node()
 	{
 		eol=false; 
+		visited = false;
 		next = NULL;
+		sig = false;
 	}
 };
 
 void printlist(node* tmp)
 {
+	tmp->sig = true;
 	node *tmpn = tmp->next;
 	cout<<tmp->data<<" ";
-	while (tmpn != tmp)
+
+	while (tmpn->sig==false)
 	{
 		if (tmp->data == tmpn->data)
 		{
-			cout<<tmpn->data;
+			cout<<tmpn->data;	
 			cout<<endl;
 			cout<<tmpn->data<<" ";
 			tmpn = tmpn->next;
@@ -38,10 +42,8 @@ void printlist(node* tmp)
 		}
 	}
 
-	if (tmpn==tmp)
-	{
-		cout<<tmpn->data<<"\n";
-	}
+	tmp->sig = false;
+	cout<<tmp->data<<"\n";	
 }
 
 int main()
@@ -50,6 +52,7 @@ int main()
 	int a;
 
 	map<int,int> m;
+	map<int,bool> vt;
 
 	cin>>a;
 	head->data = a;
@@ -66,6 +69,7 @@ int main()
 		}
 
 		m[a]++;
+		vt[a] = false;
 		tmp = new node();
 		tmp->data = a;
 		prev->next = tmp;
@@ -73,22 +77,33 @@ int main()
 	}
 
 	tmp = head;
+	map<int,int>::iterator it;
 
-	while(true)
+	node* tmpn = tmp;
+
+	while(!tmp->visited)
 	{
-		if (tmp->eol==true)
+		tmp->visited = true;
+		
+		if (vt[tmp->data]==true)
 		{
-			break;
+			tmp=tmp->next;
+			continue;
 		}
-
-		cout<<tmp->data<<"\n";
+		vt[tmp->data] = true;
 
 		if (m[tmp->data]>1) 
 		{
 			node* tmpq = tmp;
 			printlist(tmpq);
-			tmp = tmp->next;
 		}
+
+		if (tmp->eol==true)
+		{
+			break;
+		}
+
+		tmp = tmp->next;		
 	}
 
 	return 0;
