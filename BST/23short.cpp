@@ -28,20 +28,6 @@ void printvec(vector<int> v)
     cout<<endl;
 }
 
-void prntvecnode(vector <bstnode*>&dt)
-{
-    for (int i=0;i<dt.size();++i)
-    {
-        cout<<dt[i]->data<<" "<<dt[i]->t<<endl;
-    }
-    cout<<endl;
-}
-
-
-bool sortf(bstnode* &n1,bstnode* &n2)
-{
-    return (n1->data< n2->data);
-}
 
 void insert(bstnode* &T,int k,int l,int Tn)
 {
@@ -65,31 +51,33 @@ void insert(bstnode* &T,int k,int l,int Tn)
     }
 }
 
-void inorderU(bstnode* T,vector<bstnode*>&dt)
+void inorderU(bstnode* T,map<int,bool>&mDT,map<int,int>&mT)
 {
     if (T==NULL) return;
 
     if (T->lchild !=NULL )
     {
-        inorderU(T->lchild,dt);
+        inorderU(T->lchild,mDT,mT);
     }
-    dt.push_back(T);
+    mDT[T->data] = true;
+    mT[T->data] = T->t;
     if (T->rchild != NULL)
     {
-        inorderU(T->rchild,dt);
+        inorderU(T->rchild,mDT,mT);
     }
 }
 
 
-void mergeL(bstnode* T1,bstnode* T2,vector<bstnode*>&dt)
+void mergeL(bstnode* T1,bstnode* T2,map<int,bool>&mDT,map<int,int>&mT)
 {
-    inorderU(T1,dt);
-    inorderU(T2,dt);
+    inorderU(T1,mDT,mT);
+    inorderU(T2,mDT,mT);
 }
 
 int main()
 {
-    int a;
+    //Inputting tree
+    int a,sum;
     cout<<"First Tree input : ";
     bstnode* T1 = NULL;
     while(true)
@@ -107,25 +95,19 @@ int main()
         insert(T2,a,0,2);
     }
 
-    vector<bstnode*>dt;
-    
-    mergeL(T1,T2,dt);
-    sort(dt.begin(),dt.end(),sortf);
-    //prntvecnode(dt);
+    // code goes here...
 
     map<int,bool> mDT;
-    map<int,int>mT;
-    for (int i=0;i<dt.size();++i)
-    {
-        mDT[dt[i]->data] = true;
-        mT[dt[i]->data] = dt[i]->t;
-    }
-    int sum;
+    map<int,int>mT;    
+    mergeL(T1,T2,mDT,mT);
+  
     map<int,bool>::iterator it,itr,itx;
 
-    set<vector<int> > ans; // set for storing final answer
+    // set for storing final answer
+    set<vector<int> > ans; 
 
     vector <int> tmp(3,0);
+
     for (it = mDT.begin();it!=mDT.end();++it)
     {
         sum = it->first;
@@ -151,7 +133,6 @@ int main()
 
     set<vector<int>>::iterator its;
     for (its = ans.begin();its!=ans.end();++its) printvec(*its);
-
-
+    
     return 0;
 }
