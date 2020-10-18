@@ -1,3 +1,31 @@
+/*
+Targets - Print all targets ( paths ) from start node 1.﻿
+
+The nodes are numbered (with data values) from 1 to 18.
+
+The output is needed to print the path from 1 to 16  and from 3 to 12
+
+
+
+The test case input sequence is  node's data value number of links it has 
+
+test case input ( cin >> )  : 1 1 2 1 3 2 4 1 5 2 6 1 7 0 8 1 9 0 10 3 11 1 12 0 14 1 15 1 16 0 17 1 18 0
+
+input ( source point s, target point t )  ( cin >> s , cin >> t )  :  1 16
+
+print path ( cout << )
+
+input ( source point s, target point t )  ( cin >> s, cin >> t )  :  3 12
+
+print path ( cout << )
+
+
+
+test case output :  1 2 3 10 14 15 16
+
+test case output : 3 10 11 12
+*/
+
 #include <iostream>
 #include <vector>
 using namespace std;
