@@ -50,16 +50,35 @@ void convT(TreeNode*&T)
     }
 }
 
+int minT(TreeNode*T)
+{
+    if (T==NULL ) return INT_MAX;
+    while(T->left!=NULL && T->right==NULL)
+        T=T->left;
+    
+    return T->data;
+}
 
+int maxT(TreeNode*T)
+{
+    if (T==NULL) return INT_MIN;
+    while(T->left !=NULL && T->right!=NULL)
+        T=T->right;
+
+    return T->data;
+}
 
 bool check_bst(TreeNode* &T)
 {   
-        bool o;int a,b;
+       if (T->left == NULL && T->right == NULL) return true;
+
+        bool o;
         if (T->left !=NULL && T->right ==NULL)
         {
-            a = T->data;b=T->left->data;
-            if (a==b) return false;
-            if (T->data==max(a,b) && T->left->data == min(a,b))
+            int a = maxT(T->right);
+            //b=T->left->data;
+            //if (a==b) return false;
+            if (T->data > a)
             {
                 o = check_bst(T->left);
                 if (!o)
@@ -77,9 +96,9 @@ bool check_bst(TreeNode* &T)
         }
         else if (T->left == NULL && T->right !=NULL)
         {
-            a = T->data;b = T->right->data;
-            if (a==b) return false;
-            if (T->data == min(a,b) && T->right->data == max(a,b))
+            int b = minT(T->right);
+            //if (a==b) return false;
+            if (T->data < b)
             {
                 o = check_bst(T->right);
                 if (!o) 
@@ -98,7 +117,9 @@ bool check_bst(TreeNode* &T)
             
         else
         {
-            if (T->left->data<T->data && T->right->data > T->data)
+            int a = maxT(T->left);
+            int b = minT(T->right);
+            if (a<T->data && T->data < b)
             {   
                 o = check_bst(T->left);
                 if (!o) 
@@ -165,8 +186,8 @@ int main()
     tmp = new TreeNode();tmp->data = 11;
     T->left->left->right = tmp;
     
-
-
+    
+    cout<<minT(T)<<" = min "<<maxT(T)<<" = max";
     //Input 2
     /*T->data = 5;
     tmp = new TreeNode();tmp->data = 8;
@@ -192,7 +213,8 @@ int main()
     o = check_bst(T);
     if (o) cout<<"YES\n";
     else cout<<"NO\n";
-
+    cout<<T->left->data<<endl<<endl;
     return 0;
 }
 
+dvb
