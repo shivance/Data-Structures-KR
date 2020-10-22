@@ -11,10 +11,14 @@ public:
     bstnode* lchild;
     int *arr;
     bstnode* rchild;
-    bstnode(int d)
+    bstnode(int k[],int d)
     {
-        arr = new int[d];
         lchild = rchild = NULL;
+        arr = new int[d];
+        for (int i=0;i<d;++i)
+        {
+            arr[i] = k[i];
+        }
     }
 };
 
@@ -32,14 +36,11 @@ void insert(bstnode* &T,int k[],int lvl,int d)
 {
     if (T==NULL)
     {
-        T = new bstnode(d);
-        T->arr = k;
+        T = new bstnode(k,d);
     }
     else
     {
-        if (T->arr[lvl%d] == k[lvl%d])
-            return;
-        else if (k[lvl%d]<T->arr[lvl%d])
+        if (k[lvl%d]<T->arr[lvl%d])
         {
             insert(T->lchild,k,lvl+1,d);
         }
@@ -50,16 +51,45 @@ void insert(bstnode* &T,int k[],int lvl,int d)
     }
 }
 
+bool equalarr(int k[],int m[],int d)
+{
+    bool flg =true;
+    for (int i=0;i<d;++i)
+    {
+        if (k[i]!=m[i]) flg = false;
+    }
+    return flg;
+}
+
+void search(bstnode*T,int k[],int lvl,int d,bool &ans)
+{
+    if (T==NULL) return;
+    else
+    {
+        if (k[lvl%d]== T->arr[lvl%d])
+        {
+            if (equalarr(T->arr,k,d)) ans = true;
+        }
+        else if (k[lvl%d]<T->arr[lvl%d])
+        {
+            search(T->lchild,k,lvl+1,d,ans);
+        }
+        else
+        {
+            search(T->rchild,k,lvl+1,d,ans);
+        }
+    }
+}
+
 void inorder(bstnode* T,int d)
 {
     if (T==NULL) return;
-
+    
     if (T->lchild !=NULL )
     {
         inorder(T->lchild,d);
     }
     print(T->arr,d);
-    cout<<"\n";
     if (T->rchild != NULL)
     {
         inorder(T->rchild,d);
@@ -74,6 +104,7 @@ int main()
     cin>>d;
     
     bstnode* T = NULL;
+
     while(true)
     {
         cin>>a;
@@ -83,13 +114,29 @@ int main()
         {
             cin>>v[i];
         }
-        print(v,d);
-        insert(T,v,1,d);
+        
+        insert(T,v,0,d);
     }
-    cout<<"print\n";
+    
     inorder(T,d);
-    cout<<"\n";
-    cout<<T->lchild->arr[0]<<" "<<T->lchild->arr[1];
+    bool ans = false;
+    cout<<"Enter value to be searched : ";
+    int v[d];
+    while(true)
+    {
+        cin>>a;
+        if (a==-1)
+            break;
+        for (int i=0;i<d;++i)
+        {
+            cin>>v[i];
+        }
+        ans = false;
+        search(T,v,0,d,ans);
+        if (ans) cout<<"Exist\n";
+        else cout<<"Doesn't exist\n";
+    }
+
     return 0;
 }
 
@@ -101,6 +148,8 @@ int main()
 3 18
 1 
 70 15
+1
+10 80
 1
 40 30
 1
