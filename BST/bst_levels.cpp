@@ -129,7 +129,7 @@ void inorder(bstnode* T)
     {
         inorder(T->rchild);
     }
-}
+} 
 
 void post(bstnode* T)
 {
