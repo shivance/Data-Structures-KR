@@ -46,16 +46,18 @@ void siftUp(vector<Node*>&H,int &i,int &size)
 
 void siftDown(vector<Node*>&H,int i, int &s)
 {
+    if (H[i]==NULL) return;
+
 	int minind = i;
 	int l = left(i);
-	if (l<=s && H[l]->dt < H[minind]->dt)
+	if (l<=s && H[l]!=NULL && H[l]->dt < H[minind]->dt)
 	{
 		minind = l;
 	}
 
 	int r = right(i);
 
-	if (r<=s && H[r]->dt < H[minind]->dt)
+	if (r<=s && H[r]!=NULL && H[r]->dt < H[minind]->dt)
 	{
 		minind = r;
 	}
@@ -76,8 +78,9 @@ void insertList(vector<Node*> &H,Node* list,int&s)
 	siftUp(H,s,s);
 }
 
-int ExtractMin(vector<Node*>&H,int&size)
+int ExtractMin(vector<Node*>&H,int& size)
 {
+    if (H[1]==NULL) return INT_MAX;
     int result = H[1]->dt;
 
     if (H[1]->next !=NULL)
@@ -88,6 +91,7 @@ int ExtractMin(vector<Node*>&H,int&size)
 	    H[1] = H[size];
         size--;
     }
+
 	siftDown(H,1,size);
 
     return result;
@@ -108,18 +112,37 @@ void printvec(vector<int> v)
     for (int i=0;i<v.size();++i) cout<<v[i]<<" ";
 }
 
+void prinList(Node* head)
+{
+    while(head !=NULL)
+    {
+        cout<<head->dt<<" ";
+        head = head->next;
+    }
+}
+
+void printHeap(vector<Node*> &v)
+{
+    for (int i=1;i<v.size();++i)
+    {
+        prinList(v[i]);
+        cout<<endl;
+    }
+}
+
 int main()
 {
     int n; cin>>n;// number of list
-    vector<Node*> H;
+    vector<Node*> H(n+1,NULL);
     Node* prev,*head,*tmpn;
 
     int dt;
-    for (int i=0;i<n;++i)
+    for (int i=1;i<=n;++i)
     {
         cin>>dt;
         if (dt==-1) continue;
         head = new Node(); head->dt = dt; 
+        H[i] = head;
         prev = head;
         while(true)
         {
@@ -130,16 +153,22 @@ int main()
             tmpn->dt = dt;
             prev->next = tmpn;
             prev = tmpn;
-        }
+        }  
     }
     buildHeap(H);
+    cout<<"Heap is : \n";   
+    printHeap(H);
+
     vector<int>ans;
     int size = H.size()-1;
-    while(size>0)
+    int p;
+    while(size>=1)
     {
-        ans.push_back(ExtractMin(H,size));
+        p = ExtractMin(H,size);
+        cout<<"pushing p = "<<p<<" size = "<<size<<endl;
+        ans.push_back(p);
     }
-
+    //cout<<ans.size();
     printvec(ans);
     return 0;
 }
