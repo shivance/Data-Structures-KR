@@ -18,7 +18,29 @@ public:
 };
 
 
+<<<<<<< HEAD
+void input(bstnode* &T)
+{
+    char dir;//L for left  R for right X to terminate
+    int data;bstnode* tmp;
+
+    while(true)
+    {
+        cin>>dir;
+        if (dir == 'X')
+        {
+            break;return;
+        }
+        cin>>data;
+        tmp = new bstnode();
+
+    }
+}
+
+void convT(bstnode*&T)
+=======
 void convT(node*&T)
+>>>>>>> fad424c66c86420124e363383720740446ebd1a7
 {
     if (T==NULL) return;
 
@@ -114,4 +136,8 @@ int main()
     inorder(T);
 
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fad424c66c86420124e363383720740446ebd1a7
