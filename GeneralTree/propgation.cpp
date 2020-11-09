@@ -110,7 +110,7 @@ void printTime(GTnode* &T)
 	while(!q.empty())
 	{
 		tmp = q.front();
-		cout<<tmp->time<<" ";
+		cout<<tmp->l<<" was updated at t = "<<tmp->time<<"\n";
         q.pop();
 
         list<GTnode*>::iterator it;
@@ -119,6 +119,7 @@ void printTime(GTnode* &T)
             q.push(*it);
 	}
 }
+
 
 
 void updateMass(GTnode* &T)
@@ -175,6 +176,8 @@ int propagate(GTnode* &T)
 
     while(true)
     {
+        if (v.size()==(T->mass+1)) return t;
+
         printvec(v);
         tmpvec = v;
         for (vit=v.begin();vit!=v.end();++vit)
@@ -185,21 +188,21 @@ int propagate(GTnode* &T)
                 it = tmp->ls.begin();
                 while (it!=tmp->ls.end() && ((*it)->flg)) 
                     ++it;
-            
-                if (*it != NULL)
+
+                if (*it != NULL && it != tmp->ls.end())
                 {
                     (*it)->flg = true;
                     (*it)->time = t;
                     tmpvec.push_back(*it);
                 }
+
+                else continue;
             }
         }
         v = tmpvec;
         ++t;
-
-        if (v.size()>(T->mass+1)) break;
     }
-    
+    --t;
 
     return t;
 }
@@ -214,8 +217,8 @@ int main()
     updateMass(T);
     sortTree(T);
     int t = propagate(T);
-    cout<<t<<"\n";
-    
+    cout<<"Maximum time : "<<t<<"\n";
+    printTime(T);
     
 	return 0;	
 }
