@@ -114,13 +114,8 @@ void printMLdepth(mlnode* tmp)
 
 int main()
 {
-	int a,drctn,k;
-
+	int a;
 	mlnode* head = new mlnode();
-	mlnode* tmp;
-	mlnode* tmp_up;
-	mlnode *prev;
-	mlnode *tmp_cur_d;
 	cin>>a;
 	head->data = a;
 	tmp = head;

@@ -1,32 +1,31 @@
 #include <iostream>
 #include <queue>
+#include <list>
 using namespace std;
 
 class GTnode
 {
 public:
-	GTnode *fc,*nc;
+    list<GTnode*> ls;
 	char l;
 	GTnode()
 	{
 		l = '0';
-		fc=nc=NULL;
 	}
 };
 
-void printQ(queue<GTnode*>q)
+void printList(list<GTnode*>ls)
 {
-	cout<<"\nqueue is : ";
-	while (!q.empty())
-	{
-		cout<<q.front()->l<<" ";
-		q.pop();
-	}
-	cout<<"\n";
+    while(!ls.empty())
+    {
+        cout<<ls.front()->l<<" ";
+        ls.pop_front();
+    }
+    cout<<"\n";
 }
 
-//ABC..D.E..FG.H..JK.L.MP.Q..N....
-void inputGT(GTnode* T)
+
+void inputGT(GTnode* &T)
 {
 	GTnode* tmpc,*tmpnxt;char a;
 	cin>>a;
@@ -35,7 +34,7 @@ void inputGT(GTnode* T)
 
 	tmpc = new GTnode();
 	tmpc->l = a;
-	T->fc = tmpc;
+	T->ls.push_back(tmpc);
 	inputGT(tmpc);
 
 	while(true)
@@ -45,8 +44,7 @@ void inputGT(GTnode* T)
 
 		tmpnxt = new GTnode();
 		tmpnxt->l = a;
-		tmpc->nc = tmpnxt;
-		tmpc = tmpnxt;
+        T->ls.push_back(tmpnxt);
 		inputGT(tmpnxt);
 	}
 }
@@ -61,18 +59,12 @@ void level(GTnode* T)
 	{
 		tmp = q.front();
 		cout<<tmp->l<<" ";
-		tmpn = tmp->fc;
-		q.pop();
+        q.pop();
 
-		if(tmpn!=NULL)
-		{
-			q.push(tmpn);
-			while(tmpn->nc!=NULL)
-			{
-				q.push(tmpn->nc);
-				tmpn = tmpn->nc;
-			}
-		}
+        list<GTnode*>::iterator it;
+
+        for (it = tmp->ls.begin();it!=tmp->ls.end();++it)
+            q.push(*it);
 	}
 }
 
@@ -82,11 +74,9 @@ int main()
 	GTnode* T = new GTnode();
 	cin>>a;
 	T->l = a;
-	inputGT(T);
+	inputGT(T);	
 	level(T);
 
 	return 0;	
 }
 
-
-//ABC.D.E..FG.H..JK.L.MP.Q..N...
