@@ -176,7 +176,7 @@ int propagate(GTnode* &T)
 
     while(true)
     {
-        if (v.size()==(T->mass+1)) return t;
+        if (v.size()>=(T->mass+1)) break;
 
         printvec(v);
         tmpvec = v;
@@ -202,6 +202,7 @@ int propagate(GTnode* &T)
         v = tmpvec;
         ++t;
     }
+    printvec(v);
     --t;
 
     return t;
