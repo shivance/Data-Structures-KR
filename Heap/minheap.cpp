@@ -90,6 +90,11 @@ public:
     {
         return harr[0];
     }
+    
+    int getsize()
+    {
+        return heap_size;
+    }
 
     void printarr()
     {
