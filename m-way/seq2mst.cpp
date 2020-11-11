@@ -73,7 +73,7 @@ void level(mstnode*&MT)
 void seq2mst(mstnode*& MT,int arr[],int n,int &i,int z,int &p,int m,int d,int curr_depth)
 {
     if (p==0) return;
-    if (i>=26) return;
+    if (i>=n) return;
     if (z>n) return;
 
     if (curr_depth>d) 
@@ -96,12 +96,12 @@ void seq2mst(mstnode*& MT,int arr[],int n,int &i,int z,int &p,int m,int d,int cu
 
     int j,u;
 
-    for (j=0;j<m;++j)
+    for (j=0;j<m-1;++j)
     {        
         u = pow(m+1,curr_depth) - 1 - p;
-        if (i>=25) return;
+        if (i>n-1) return;
         seq2mst(MT->way[j],arr,n,i,u,p,m,d,curr_depth+1);
-        //cout<<"i = "<<i<<" filling "<<arr[i]<<" at depth = "<<curr_depth<<"\n";
+        cout<<"i = "<<i<<" filling "<<arr[i]<<" at depth = "<<curr_depth<<"\n";
         MT->key[j] = arr[i];        
         ++i;
         ++(MT->cnt);
@@ -134,10 +134,13 @@ int main()
     inorder(MT);
     cout<<"\nlevel : ";
     level(MT);
+    cout<<"\n";
+    //printarr(MT->way[0]->key,MT->way[0]->cnt);
 
 
     return 0;
 }
-
-//26 6
-//1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+/*
+26 6
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+*/
