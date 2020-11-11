@@ -1,3 +1,5 @@
+// Iterative Depth Limited Search
+
 #include <iostream>
 #include <queue>
 #include <list>
