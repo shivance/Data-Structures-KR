@@ -12,12 +12,13 @@ public:
     int cnt;
     int cnt_w;
     int d;
-    deque<int>key;
-    deque<BTnode*>way;
+    
 
     BTnode(int d)
     {
         this->d = d;
+        deque<int>key;
+        deque<BTnode*>way;
         cnt = 0;
         cnt_w = 0;
         way.push_back(NULL);
@@ -90,7 +91,16 @@ BTnode* search(BTnode*BT,int k)
 
 void Add(BTnode* & BT,BTnode* &left,BTnode* &ri8,int d,int k)
 {
-    if (BT==NULL) BT = new BTnode(d);
+    if (BT==NULL) 
+    {
+        BT = new BTnode(d);
+        BT->key.push_back(k);
+        BT->cnt++;
+        BT->way.push_back(NULL);
+        BT->way.push_back(NULL);
+        return;
+    }
+
     BTnode* leaf = search(BT,k);
 
     //no overflow
@@ -98,7 +108,7 @@ void Add(BTnode* & BT,BTnode* &left,BTnode* &ri8,int d,int k)
     {
         leaf->key.push_back(k);
         ++(leaf->cnt);
-        sort(leaf->key.begin(),leaf->key.begin()+leaf->cnt);
+        sort(leaf->key.begin(),leaf->key.end());
         leaf->way.push_back(NULL);
         int idx = -1;
         getidx(leaf->key,idx,k);
@@ -115,6 +125,13 @@ void Add(BTnode* & BT,BTnode* &left,BTnode* &ri8,int d,int k)
             tmp.push_back(leaf->key.at(i));
             leaf->key.pop_back();
         }
+        while(!leaf->key.empty())
+        {
+            tmp.push_back(leaf->key.back());
+            --(leaf->cnt);
+            leaf->key.pop_back();
+        }
+
         tmp.push_back(k);
         sort(tmp.begin(),tmp.end());
         int mid_idx = tmp.size()/2;
@@ -127,20 +144,22 @@ void Add(BTnode* & BT,BTnode* &left,BTnode* &ri8,int d,int k)
         {
             if (tmp[i]<mid) 
             {
-                leaf->key.push_back(tmp[i]);
+                leaf->key.push_back(tmp.at(i));
                 leaf->cnt++;
             }
             else if (tmp[i]>mid) 
             {
-                newchild->key.push_back(tmp[i]);
+                newchild->key.push_back(tmp.at(i));
                 newchild->cnt++;
             }
         }
         tmp.clear();
+
+        //adjusting pointers
         while(leaf->way.size() != leaf->cnt)
         {
-            newchild->way.push_back(leaf->way.front());
-            leaf->way.pop_front();
+            newchild->way.push_front(leaf->way.back());
+            leaf->way.pop_back();
         }
         leaf->way.push_back(NULL);
         
@@ -180,6 +199,19 @@ void Add(BTnode* & BT,BTnode* &left,BTnode* &ri8,int d,int k)
     }
 }
 
+void inorder(BTnode*BT)
+{
+    if (BT==NULL || BT->cnt==0)
+        return;
+    int i;
+    for (i=0;i<BT->cnt;++i)
+    {
+        inorder(BT->way.at(i));
+        cout<<BT->key.at(i)<<" ";
+    }
+    inorder(BT->way.at(i));
+}
+
 int main()
 {
     BTnode* BT = NULL,*left = NULL,*ri8 = NULL;
@@ -188,10 +220,11 @@ int main()
     while(true)
     {
         cin>>k;
+        if (k==-1) break;
         Add(BT,left,ri8,d,k);
     }
 
-    level(BT);
+    inorder(BT);
     
     return 0;
 }
