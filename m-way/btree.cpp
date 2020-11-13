@@ -157,19 +157,23 @@ void Add(BTnode* & BT,BTnode* &ri8,int d,int k,bool o)
             newpar->cnt++;
             newpar->way[0] = leaf;
             newpar->way[1] = newchild;
-            int idx = -1;
-            getidx(leaf->key,leaf->cnt,idx,k);
-
-            if (idx!=-1)
-                ri8 = leaf->way[idx+1];
-
-            getidx(newchild->key,newchild->cnt,idx,k);
-            
-            if (idx!=-1)
-                ri8 = newchild->way[idx+1];
-            
             if (mid==k) // no ri8 updation
                 o= true;
+            else{
+                int idx = -1;
+                getidx(leaf->key,leaf->cnt,idx,k);
+                
+                if (idx!=-1)
+                     ri8 = leaf->way[idx+1];
+
+                else
+                {
+                     getidx(newchild->key,newchild->cnt,idx,k);
+
+                     if (idx!=-1)
+                          ri8 = newchild->way[idx+1];
+                }
+            }
             cout<<"parent created ";printarr(newpar->key,newpar->cnt);cout<<"\n";
             BT = newpar; // update root
             cout<<"root updated -- added "<<mid<<" to root\n";
