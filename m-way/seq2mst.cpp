@@ -60,7 +60,7 @@ void level(mstnode*&MT)
         q.pop();
 
         int i;
-        for (i=0;i<=tmp->m;++i)
+        for (i=0;i<=tmp->cnt;++i)
         {
             if (tmp->way[i] == NULL) continue;
             q.push(tmp->way[i]);
@@ -122,7 +122,7 @@ int main()
 
     
 
-    float df = float(log(n+1))/log(m);
+    float df = float(log(n+1))/log(m+1);
     int d = ceil(df);
     cout<<"max depth of tree : "<<d<<endl;
     int i=0;
