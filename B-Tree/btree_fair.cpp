@@ -236,8 +236,6 @@ int main()
     cin>>n;
     cin>>k;
     BT = newBTnode(d);
-    // using a deque cache for performance improvement
-    // didn't use 'new BTnode(d)'
     BT->key[BT->cnt] = k;
     BT->cnt++;
 
