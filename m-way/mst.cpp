@@ -115,6 +115,38 @@ void inorder(mstnode*&MT)
     inorder(MT->way[i]);
 }
 
+BTnode* search(BTnode*BT,int k)
+{
+    int i;
+    for (i=0;i<BT->cnt;++i)
+    {
+        if(BT->key[i]==k)
+            return BT;
+        else if (BT->key[i]>k)
+            break;
+    }
+
+    if (i==BT->cnt)
+    {
+        if (BT->way[i]==NULL)
+            return BT;
+        else 
+            return search(BT->way[i],k);
+    }
+}
+
+BTnode* parent(BTnode* BT,BTnode* node)
+{
+    int i;
+    for (i=0;i<BT->cnt;++i)
+    {
+        if (BT->key[i]>node->key[0]) break;
+    }
+    if (BT->way[i] == node) return BT;
+    else return parent(BT->way[i],node);
+}
+
+
 int main()
 {
     int m;cin>>m;
@@ -131,8 +163,18 @@ int main()
 
     inorder(MT);  
     cout<<"\n";  
-    level(MT);
-    cout<<"\n";
+    
+    while(true)
+    {
+        cin>>a;
+        BTnode* leaf = search(BT,k);
+        cout<<"leaf : "
+        printarr(leaf->key,leaf->cnt);
+        cout<<"\n";
+        BTnode* par = parent(BT,leaf);
+        cout<<"parent : ";
+        printarr(par->key);
+    }
     
     return 0;
 }
