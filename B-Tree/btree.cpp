@@ -160,7 +160,7 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
         BTnode* newchild = new BTnode(d);
         vector<int>tmp;
         for (int i=0;i<leaf->cnt;++i) 
-        {
+        {   
             tmp.push_back(leaf->key[i]);
             leaf->key[i]= INT_MAX;
         }
@@ -169,7 +169,7 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
         tmp.push_back(k);
         cout<<"added overflow k = "<<k<<"\n";
         sort(tmp.begin(),tmp.end());
-        int mid_idx = tmp.size()/2;
+        int mid_idx = tmp.size()/2  ;
         int mid = tmp[mid_idx];
 
         for (int i=0;i<tmp.size();++i)
