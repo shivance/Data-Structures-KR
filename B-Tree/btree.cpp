@@ -190,10 +190,20 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode* &ri8,int d,int k,bool o)
         sortL(leaf);
         cout<<"Node splitted into : ";
         cout<<"Left : ";printarr(leaf->key,leaf->cnt);cout<<" right : ";printarr(newchild->key,newchild->cnt);cout<<"\n";
-
+        // newly splitted right node
+        ri8 = newchild;
+        cout<<"data of newly splitted node : ";printarr(ri8->key,ri8->cnt);cout<<"\n";
         //adjusting pointers
-        int j = 0;
-        for (int i=mid_idx;i<=cnt_l;++i,++j)
+        int j;
+        if (mid == k) 
+        {
+            j= 1;
+            cout<<"mid == k \n";
+            o = true;
+        }
+        else j= 0;
+
+        for (int i=mid_idx+1;i<=cnt_l;++i,++j)
         {
             newchild->way[j] = leaf->way[i];
             if (leaf->way[i]!=NULL){
@@ -209,15 +219,24 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode* &ri8,int d,int k,bool o)
             BTnode* newpar = new BTnode(d);
             newpar->key[0] = mid;
             newpar->cnt++;
-            newpar->way[0] = leaf;
-            newpar->way[1] = newchild;
+            if (o)
+            {
+                newpar->way[1]= leaf;
+                newpar->way[2]= newchild;
+            }
+            else{
+                newpar->way[0] = leaf;
+                newpar->way[1] = newchild;
+            }
             BT = newpar; // update root
-            vector<int>::iterator it;
+            
+            /*vector<int>::iterator it;
             it = find(tmp.begin(),tmp.end(),k);
             int idx = (int)(it - tmp.begin());
             if (idx == mid_idx)
             {
                 o = true;
+                ri8 = newchild->way[0];
             }
             else if (idx>mid_idx)
             {
@@ -226,7 +245,7 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode* &ri8,int d,int k,bool o)
             else
             {
                 ri8 = newchild->way[idx+1];
-            }
+            }*/
 
             cout<<"parent created ";printarr(newpar->key,newpar->cnt);cout<<"\n";
             cout<<"root updated -- added "<<mid<<" to root\n";
@@ -237,15 +256,24 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode* &ri8,int d,int k,bool o)
             BTnode* par = parent(BT,leaf);
             int idxn;
             cout<<"called nested else \n";
-            
+            int c = par->cnt;
             Add(BT,par,ri8,d,mid,o);
-            getidx(par->key,par->cnt,idxn,mid);
-            cout<<"added mid = "<<mid<<"\n";
-            //if(o==false){ 
+            
+            if (c<d-1){
+                getidx(par->key,par->cnt,idxn,mid);
+                cout<<"added mid = "<<mid<<"\n";
                 par->way[idxn+1] = newchild;
-            //}
-    
-            return;            
+            }
+            else
+            {
+                if (o) ri8->way[0] = newchild;
+                else{
+                    getidx(ri8->key,ri8->cnt,idxn,mid);
+                    cout<<"added mid = "<<mid<<"\n";
+                    ri8->way[idxn+1] = newchild;
+                }
+            }
+            return;
         }
     }
 }
@@ -278,3 +306,5 @@ int main()
     
     return 0;
 }
+
+//4 7 22 21 35 12 23 39 16 32 29 46 28 43 64 9 49 53 40 42 24 60 
