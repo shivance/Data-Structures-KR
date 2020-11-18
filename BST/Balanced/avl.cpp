@@ -1,9 +1,5 @@
 #include <iostream>
-#include <climits>
-#include <vector>
-#include <queue>
 #include <deque>
-#include <stack>
 using namespace std;
 
 class AVLnode
@@ -13,9 +9,9 @@ public:
     int key;
     AVLnode *rc;
     int h;
-    AVLnode()
+    AVLnode(int k)
     {
-        key = 0;
+        key = k;
         lc = rc = NULL;
         h = 1;
     }
@@ -23,9 +19,9 @@ public:
 
 deque<AVLnode> nodeCache;
 
-AVLnode* newAVLnode()
+AVLnode* newAVLnode(int k)
 {
-    nodeCache.push_back(AVLnode());
+    nodeCache.push_back(AVLnode(k));
     AVLnode* node = &nodeCache.back();
     return node;
 }
@@ -45,7 +41,7 @@ AVLnode* leftR(AVLnode* T)
 	T->rc = T2;
 
     T->h = max(height(T->lc),height(T->rc)) + 1;
-    x->h = max(height(T->lc),height(T->rc)) + 1;
+    x->h = max(height(x->lc),height(x->rc)) + 1;
 
 	return x;
 }
@@ -59,7 +55,7 @@ AVLnode* rightR(AVLnode* T)
 	T->lc = T2;
 
     T->h = max(height(T->lc),height(T->rc)) + 1;
-    x->h = max(height(T->lc),height(T->rc)) + 1;
+    x->h = max(height(x->lc),height(x->rc)) + 1;
 
 	return x;
 }
@@ -68,25 +64,27 @@ int loadf(AVLnode* T)
 {
     if (T==NULL)
         return 0;
-    return height(T->lc) - height(T->rc);
+    return (height(T->lc) - height(T->rc));
 }
 
-AVLnode* insert(AVLnode* &T,int k)
+void insert(AVLnode* &T,int k)
 {
     if (T==NULL)
     {
-        T = newAVLnode();
-        T->key = k;
-        return;
+        T = newAVLnode(k);
+        return ;
     }
-     
-    if (T->key == k)
-        return;
-    else if (k<T->key)
+        
+
+    if (k<T->key)
         insert(T->lc,k);
     
-    else
+    else if (k>T->key)
         insert(T->rc,k);
+    
+    else 
+        return;
+
 
     T->h = 1 + max(height(T->lc),height(T->rc));
 
@@ -98,7 +96,8 @@ AVLnode* insert(AVLnode* &T,int k)
 
     // RR -> left rotation
     else if (load < -1 && k > T->rc->key)
-        T = leftR(T->lc);
+        T = leftR(T);
+    
 
     // LR -> right left rotation
     else if (load > 1 && k > T->lc->key)
@@ -112,13 +111,15 @@ AVLnode* insert(AVLnode* &T,int k)
         T->rc = rightR(T->rc);
         T = leftR(T);
     }
+
+    return;
 }
 
 void inorder(AVLnode*T)
 {
     if (T==NULL)
         return;
-
+    
     inorder(T->lc);
     cout<<T->key<<" ";
     inorder(T->rc);
@@ -126,20 +127,19 @@ void inorder(AVLnode*T)
 
 int main()
 {
-    AVLnode* T;
+    AVLnode* T = NULL;
     int a;
 
-    while(1)
+    while(true)
     {
         cin>>a;
         if (a==-1) break;
         insert(T,a);
-        cout<<'\n';
         inorder(T);
-        cout<<"\n";
+        cout<<"\nroot -> key = "<<T->key<<"\n";
     }
 
-
+    inorder(T);
     return 0 ;
 }
 
