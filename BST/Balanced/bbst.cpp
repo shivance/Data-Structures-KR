@@ -28,29 +28,32 @@ bstnode* newBTnode()
     return node;
 }
 
-void leftR(bstnode* &BST)
+trpnode* leftR(bstnode* &BST)
 {
 	bstnode* newBST = BST->rc;
-	bstnode* LOR = BST->rc->lc;
+	bstnode* LOR = newBST->lc;
 	
 	newBST->lc = BST;
-	newBST->lc->rc = LOR;
+	BST->rc = LOR;
 
 	newBST->lc->h = max(newBST->lc->rc->h,newBST->lc->rc->h);
 	newBST->h = max(newBST->lc->h,newBST->rc->h);
-	BST = newBST;
+	
+	return newBST;
 }
 
-void rightR(bstnode* &BST)
+trpnode* rightR(bstnode* &BST)
 {
 	bstnode* newBST = BST->lc;
-	bstnode* ROLs = BST->lc->rc;
+	bstnode* ROL = newBST->rc;
 
 	newBST->rc = BST;
-	newBST->rc->lc  = ROL;
-	newBST->lc->h = max(newBST->rc->lc->h,newBST->rc->lc->h);
-	newBST->h = max(newBST->lc->h,newBST->rc->h);
-	BST = newBST;
+	BST->lc  = ROL;
+	
+	//newBST->lc->h = max(newBST->rc->lc->h,newBST->rc->lc->h);
+	//newBST->h = max(newBST->lc->h,newBST->rc->h);
+	
+	return newBST;
 }
 
 
