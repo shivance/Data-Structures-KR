@@ -1,6 +1,7 @@
 #include <iostream>
 #include <deque>
 #include <queue>
+#include <cstdlib>
 using namespace std;
 
 template <typename D>
@@ -205,7 +206,7 @@ class AVL
             return T;
         }
 
-        AVLnode<D>* max(){
+        AVLnode<D>* maxT(){
             return maxU(T);
         }
 
@@ -269,6 +270,7 @@ int main()
         T.insert(a);
 
         T.inorder();
+        cout<<"\n";
         //cout<<"\nroot -> key = "<<T->key<<"\n";
     }
 
