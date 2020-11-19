@@ -190,7 +190,7 @@ class BinST{
 
         BSTnode<D>* del(D key)
         {
-            return delU(BST,key);
+            delU(BST,key);
         }
 
         void bfsU(BSTnode<D> *& T)

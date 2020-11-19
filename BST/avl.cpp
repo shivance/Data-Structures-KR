@@ -140,22 +140,26 @@ class AVL
 
             else{ //key was found
                 // returns leaf as well
-                if(T->lc==NULL){
+                if(T->lc==NULL)
+                {
                     AVLnode<D>* tmp = T->rc;
                     free(T);
                     return tmp;
                 }
-                else if (T->rc==NULL){
+                else if (T->rc==NULL)
+                {
                     AVLnode<D>* tmp = T->lc;
                     free(T);
                     return tmp;
                 }
 
+                // none of child is  null
                 AVLnode<D>* tmp = minU(T->rc);
-                
                 T->key = tmp->key;
                 T->rc = delU(T->rc,T->key);
             }
+
+            if (T==NULL) return T;
 
             T->h = 1 + max(height(T->lc),height(T->rc));
 
@@ -210,9 +214,9 @@ class AVL
             return maxU(T);
         }
 
-        AVLnode<D>* del(D key)
+        void del(D key)
         {
-            return delU(T,key);
+            T = delU(T,key);
         }
 
 
@@ -273,14 +277,15 @@ int main()
         cout<<"\n";
         //cout<<"\nroot -> key = "<<T->key<<"\n";
     }
+    T.bfs();
 
     AVLnode<int>* delnode;
     while(true)
     {
         cin>>a;
         if (a==-1) break;
-        delnode = T.del(a);
-        cout<<delnode->key<<" deleted from tree\n";
+        T.del(a);
+        
         cout<<"current level order : ";
         T.bfs();
         cout<<"\n";
