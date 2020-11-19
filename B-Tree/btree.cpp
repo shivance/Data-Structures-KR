@@ -226,9 +226,9 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
             
             cout<<"parent created ";printarr(newpar->key,newpar->cnt);cout<<"\n";
             cout<<"root updated -- added "<<mid<<" to root\n";
-            cout<<"data of root : ";printarr(BT->key,BT->cnt);
+            cout<<"key of root : ";printarr(BT->key,BT->cnt);
             ri8 = newchild;
-            cout<<"data of newly splitted node : ";printarr(ri8->key,ri8->cnt);cout<<"\n";
+            cout<<"key of newly splitted node : ";printarr(ri8->key,ri8->cnt);cout<<"\n";
             cout<<"INORDER OF RI8 is : ";printarr(ri8->key,ri8->cnt);
         }
         else
@@ -238,7 +238,7 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
             cout<<"called nested else \n";
             int c = par->cnt;
             //ri8 = newchild;
-            //cout<<"data of newly splitted node : ";printarr(ri8->key,ri8->cnt);cout<<"\n";
+            //cout<<"key of newly splitted node : ";printarr(ri8->key,ri8->cnt);cout<<"\n";
             //cout<<"INORDER OF RI8 is : ";printarr(ri8->key,ri8->cnt);
             o = false;
             Add(BT,par,ri8,d,mid,o);

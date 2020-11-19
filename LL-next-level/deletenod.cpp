@@ -96,7 +96,7 @@ int main()
 			if (temp->dt == head->idx ){
 				head = head->next;
 				cout<<"in if deleting "<<temp->dt<<"\n";
-				cout<<"head->data = "<<head->dt<<"\n";
+				cout<<"head->key = "<<head->dt<<"\n";
 				deleteNode(&temp,temp->dt);
 				cout<<"current "<<temp->dt<<"\n";
 				//temp = temp->next;
@@ -104,7 +104,7 @@ int main()
 
 			else{
 				cout<<"in else deleting "<<temp->dt<<"\n";
-				cout<<"head->data = "<<head->dt<<"\n";
+				cout<<"head->key = "<<head->dt<<"\n";
 				deleteNode(&temp,temp->dt);
 				temp = temp->next;
 			}

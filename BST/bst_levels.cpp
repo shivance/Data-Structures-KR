@@ -1,10 +1,10 @@
 /*
 Binary Search Tree – Levels  
-Create a binary tree with given input data.
+Create a binary tree with given input key.
 
 Print all the following level orders.
 
-Input data: 5 8 3 4 1 9 6 7 2 -1
+Input key: 5 8 3 4 1 9 6 7 2 -1
 
 Output level orders :
 
@@ -66,7 +66,7 @@ class bstnode
 {
 public:
     bstnode* lchild;
-    int data,lvl;
+    int key,lvl;
     bstnode* rchild;
     bstnode()
     {
@@ -79,7 +79,7 @@ void printstk(stack<bstnode*> &stk)
 {
     while(!stk.empty())
     {
-        cout<<stk.top()->data<<" ";
+        cout<<stk.top()->key<<" ";
         stk.pop();
     }
 }
@@ -88,7 +88,7 @@ void printq(queue<bstnode*> &q)
 {
     while(!q.empty())
     {
-        cout<<q.front()->data<<" ";
+        cout<<q.front()->key<<" ";
         q.pop();
     }
 }
@@ -98,18 +98,18 @@ void insert(bstnode* &T,int k,int l)
     if (T==NULL)
     {
         T = new bstnode();
-        T->data = k;
+        T->key = k;
         T->lvl = l;
     }
     else
     {
-        if (T->data == k)
+        if (T->key == k)
             return;
-        else if (k<T->data)
+        else if (k<T->key)
         {
             insert(T->lchild,k,l+1);
         }
-        else if (k> T->data)
+        else if (k> T->key)
         {
             insert(T->rchild,k,l+1);
         }
@@ -124,7 +124,7 @@ void inorder(bstnode* T)
     {
         inorder(T->lchild);
     }
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     if (T->rchild != NULL)
     {
         inorder(T->rchild);
@@ -137,7 +137,7 @@ void post(bstnode* T)
     
     post(T->lchild);
     post(T->rchild);
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
 
     return;
 }
@@ -151,7 +151,7 @@ void level(bstnode* T)
     while(!q.empty())
     {
         tmp = q.front();
-        cout<<tmp->data<<" ";
+        cout<<tmp->key<<" ";
         if (tmp->lchild!=NULL) q.push(tmp->lchild);
         if (tmp->rchild!=NULL) q.push(tmp->rchild);
         q.pop();
@@ -184,7 +184,7 @@ void squiLClk(bstnode* T)
     stack <bstnode*> stk;
     //int c = 1;
     q.push(T);
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     int x = T->lvl;
     while(!q.empty())
     {
@@ -219,7 +219,7 @@ void squiLAntiClk(bstnode* T)
     stack <bstnode*> stk;
     //int c = 1;
     q.push(T);
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     int x = T->lvl;
     while(!q.empty())
     {
@@ -254,7 +254,7 @@ void revL(bstnode* T)
     queue<bstnode*> q;
     stack <bstnode*> stk;
     q.push(T);
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     int x = T->lvl;
     while(!q.empty())
     {

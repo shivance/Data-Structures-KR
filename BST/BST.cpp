@@ -7,14 +7,14 @@ using namespace std;
 class BSTnode
 {
 public:
-    int data;
+    int key;
     BSTnode* lc,*rc;
     bool lvlend;
     BSTnode()
     {
         lc = rc = NULL;
         lvlend = false;
-        data = INT_MIN;
+        key = INT_MIN;
     }
 };
 
@@ -23,14 +23,14 @@ void insert(BSTnode*&BST,int k)
     if (BST == NULL)
     {
         BST = new BSTnode();
-        BST->data = k;
+        BST->key = k;
         return ;
     }
 
-    if (BST->data > k)
+    if (BST->key > k)
         insert(BST->lc,k);
 
-    else if (BST->data < k)
+    else if (BST->key < k)
         insert(BST->rc,k);
 }
 
@@ -39,7 +39,7 @@ void inorder(BSTnode* BST)
     if(BST==NULL) return;
 
     inorder(BST->lc);
-    cout<<BST->data<<" ";
+    cout<<BST->key<<" ";
     inorder(BST->rc);
 }
 
@@ -61,23 +61,23 @@ BSTnode* max(BSTnode* BST)
 
 BSTnode* find(BSTnode* BST,int key)
 {
-    if (BST->data == key) return BST;
+    if (BST->key == key) return BST;
     if(BST==NULL) return NULL;
 
-    if (BST->data > key) find(BST->lc,key);
-    else if (BST->data <key) find(BST->rc,key);
+    if (BST->key > key) find(BST->lc,key);
+    else if (BST->key <key) find(BST->rc,key);
 }
 
 BSTnode* parent(BSTnode* BST,int key)
 {
-    if (key<BST->data)
+    if (key<BST->key)
     {
-        if (BST->lc->data == key) return BST;
+        if (BST->lc->key == key) return BST;
         else return parent(BST->lc,key);
     }
-    else if (key>BST->data)
+    else if (key>BST->key)
     {
-        if (BST->rc->data == key) return BST;
+        if (BST->rc->key == key) return BST;
         else return parent(BST->rc,key);
     }
     else return NULL;
@@ -86,7 +86,7 @@ BSTnode* parent(BSTnode* BST,int key)
 void predsucc(BSTnode* root,BSTnode*&pre,BSTnode*&succ,int key)
 {
     if (root==NULL) return ;
-    if (root->data == key)
+    if (root->key == key)
     {
         if (root->lc !=NULL)
             pre = max(root->lc);
@@ -96,7 +96,7 @@ void predsucc(BSTnode* root,BSTnode*&pre,BSTnode*&succ,int key)
         return;
     }
 
-    if (root->data<key)
+    if (root->key<key)
     {
         pre=root;
         predsucc(root->rc,pre,succ,key);
@@ -113,10 +113,10 @@ BSTnode* del(BSTnode* T,int key)
     if (T==NULL) 
         return T; 
 
-    if (key < T->data)
+    if (key < T->key)
         T->lc = del(T->lc,key);
     
-    else if (key > T->data)
+    else if (key > T->key)
         T->rc = del(T->rc,key);
 
     else{ //key was found
@@ -134,8 +134,8 @@ BSTnode* del(BSTnode* T,int key)
 
         BSTnode* tmp = min(T->rc);
         
-        T->data = tmp->data;
-        T->rc = del(T->rc,T->data);
+        T->key = tmp->key;
+        T->rc = del(T->rc,T->key);
     }
 
     return T;
@@ -153,7 +153,7 @@ void BFS(BSTnode*& T)
         tmp = q.front();
         q.pop();
 
-        cout<<tmp->data<<" ";
+        cout<<tmp->key<<" ";
         if (tmp->lc != NULL)
             q.push(tmp->lc);
         
@@ -182,16 +182,16 @@ int main()
     {
         cin>>k;
         if (k==-1) break;
-        //cout<<parent(BST,k)->data<<"\n";
+        //cout<<parent(BST,k)->key<<"\n";
         predsucc(BST,prec,succ,k);
         if (prec!=NULL)
         {
-            cout<<"predecessor : "<<prec->data<<" ";
+            cout<<"predecessor : "<<prec->key<<" ";
         }
         else cout<<"No predecessor ";
         if (succ!=NULL)
         {
-            cout<<"successor : "<<succ->data<<'\n';
+            cout<<"successor : "<<succ->key<<'\n';
         }
         else cout<<" No successor\n";
         prec = succ =NULL;

@@ -10,7 +10,7 @@ class bstnode
 {
 public:
     bstnode* lc;
-    int data,h;
+    int key,h;
     bstnode* rc;
     bstnode()
     {

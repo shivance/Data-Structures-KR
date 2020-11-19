@@ -1,13 +1,13 @@
 /*
 Targets - Print all targets ( paths ) from start node 1.﻿
 
-The nodes are numbered (with data values) from 1 to 18.
+The nodes are numbered (with key values) from 1 to 18.
 
 The output is needed to print the path from 1 to 16  and from 3 to 12
 
 
 
-The test case input sequence is  node's data value number of links it has 
+The test case input sequence is  node's key value number of links it has 
 
 test case input ( cin >> )  : 1 1 2 1 3 2 4 1 5 2 6 1 7 0 8 1 9 0 10 3 11 1 12 0 14 1 15 1 16 0 17 1 18 0
 
@@ -33,7 +33,7 @@ using namespace std;
 class tnode
 {
 public:
-	int child,data;
+	int child,key;
 	tnode** arr;
 	tnode (int s) 
 	{
@@ -47,7 +47,7 @@ void printstk(vector <tnode*> stk)
 {
 	for (int i=0;i<stk.size();++i)
 	{
-		cout<<stk[i]->data<<" ";
+		cout<<stk[i]->key<<" ";
 	}
 	cout<<endl;
 }
@@ -65,7 +65,7 @@ void inputLL(tnode* tmp)
 	{
 		cin>>a>>dir;
 		tmp->arr[i] = new tnode(dir);
-		tmp->arr[i]->data = a;
+		tmp->arr[i]->key = a;
 		inputLL(tmp->arr[i]);
 	}
 }
@@ -91,7 +91,7 @@ int main()
 	int a,dir;
 	cin>>a>>dir;
 	tnode* head = new tnode(dir);
-	head->data = a;
+	head->key = a;
 	vector<tnode*> stk;
 	inputLL(head);
 	prinTgt(head,stk);

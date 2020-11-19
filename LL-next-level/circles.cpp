@@ -9,7 +9,7 @@ using namespace std;
 class node
 {
 public:
-	int data;
+	int key;
 	bool eol,sig;
 	node* next;
 	bool visited;
@@ -26,27 +26,27 @@ void printlist(node* tmp)
 {
 	tmp->sig = true;
 	node *tmpn = tmp->next;
-	cout<<tmp->data<<" ";
+	cout<<tmp->key<<" ";
 
 	while (tmpn->sig==false)
 	{
-		if (tmp->data == tmpn->data)
+		if (tmp->key == tmpn->key)
 		{
-			cout<<tmpn->data;	
+			cout<<tmpn->key;	
 			cout<<endl;
-			cout<<tmpn->data<<" ";
+			cout<<tmpn->key<<" ";
 			tmpn = tmpn->next;
 		}
 
 		else
 		{
-			cout<<tmpn->data<<" ";
+			cout<<tmpn->key<<" ";
 			tmpn = tmpn->next;
 		}
 	}
 
 	tmp->sig = false;
-	cout<<tmp->data<<"\n";	
+	cout<<tmp->key<<"\n";	
 }
 
 int main()
@@ -58,7 +58,7 @@ int main()
 	map<int,bool> vt;
 
 	cin>>a;
-	head->data = a;
+	head->key = a;
 	node* tmp,*prev = head;
 
 	while(true)
@@ -74,7 +74,7 @@ int main()
 		m[a]++;
 		vt[a] = false;
 		tmp = new node();
-		tmp->data = a;
+		tmp->key = a;
 		prev->next = tmp;
 		prev = tmp;
 	}
@@ -88,14 +88,14 @@ int main()
 	{
 		tmp->visited = true;
 		
-		if (vt[tmp->data]==true)
+		if (vt[tmp->key]==true)
 		{
 			tmp=tmp->next;
 			continue;
 		}
-		vt[tmp->data] = true;
+		vt[tmp->key] = true;
 
-		if (m[tmp->data]>1) 
+		if (m[tmp->key]>1) 
 		{
 			node* tmpq = tmp;
 			printlist(tmpq);

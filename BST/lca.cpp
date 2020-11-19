@@ -7,7 +7,7 @@ using namespace std;
 class bstnode
 {
 public:
-    bstnode* lchild;char data;bstnode* rchild;
+    bstnode* lchild;char key;bstnode* rchild;
     bool v;
     bstnode()
     {
@@ -22,7 +22,7 @@ void markstk(stack<bstnode*>&stk)
     {
         bstnode* tmp = stk.top();
         tmp->v = true;
-        cout<<tmp->data<<" ";
+        cout<<tmp->key<<" ";
         stk.pop();
     }
 }
@@ -31,11 +31,11 @@ bool findQ(bstnode* &T,stack<bstnode*>&stk,char dt,char& par)
 {
     if (T==NULL) return false;
     
-    if (T->v) par = T->data;
+    if (T->v) par = T->key;
 
-    if (T->data == dt)  return true;
+    if (T->key == dt)  return true;
 
-    if (T->data>dt)
+    if (T->key>dt)
     {
         findQ(T->lchild,stk,dt,par);
     }
@@ -49,13 +49,13 @@ bool findP(bstnode* &T,stack<bstnode*>&stk,char dt)
 {
     if (T==NULL) return false;
     stk.push(T);
-    if (T->data == dt)
+    if (T->key == dt)
     {
         markstk(stk);
         return true;
     }
 
-    if (T->data>dt)
+    if (T->key>dt)
     {
         findP(T->lchild,stk,dt);
     }
@@ -71,17 +71,17 @@ void insert(bstnode* &T,int k)
     if (T==NULL)
     {
         T = new bstnode();
-        T->data = k;
+        T->key = k;
     }
     else
     {
-        if (T->data == k)
+        if (T->key == k)
             return;
-        else if (k<T->data)
+        else if (k<T->key)
         {
             insert(T->lchild,k);
         }
-        else if (k> T->data)
+        else if (k> T->key)
         {
             insert(T->rchild,k);
         }

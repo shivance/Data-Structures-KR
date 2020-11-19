@@ -8,7 +8,7 @@ template <typename D>
 class BSTnode
 {
 public:
-    D data;
+    D key;
     BSTnode* lc,*rc;
     bool lvlend;
     BSTnode()
@@ -45,14 +45,14 @@ class BinST{
             if (BST == NULL)
             {
                 BST = newBSTnode<D>();
-                BST->data = k;
+                BST->key = k;
                 return ;
             }
 
-            if (BST->data > k)
+            if (BST->key > k)
                 insertU(BST->lc,k);
 
-            else if (BST->data < k)
+            else if (BST->key < k)
                 insertU(BST->rc,k);
         }
 
@@ -65,7 +65,7 @@ class BinST{
             if(BST==NULL) return;
 
             inorderU(BST->lc);
-            cout<<BST->data<<" ";
+            cout<<BST->key<<" ";
             inorderU(BST->rc);
         }
 
@@ -99,11 +99,11 @@ class BinST{
 
         BSTnode<D>* findU(BSTnode<D>* BST,D key)
         {
-            if (BST->data == key) return BST;
+            if (BST->key == key) return BST;
             if(BST==NULL) return NULL;
 
-            if (BST->data > key) findU(BST->lc,key);
-            else if (BST->data <key) findU(BST->rc,key);
+            if (BST->key > key) findU(BST->lc,key);
+            else if (BST->key <key) findU(BST->rc,key);
         }
 
         BSTnode<D>* find(D key){
@@ -112,14 +112,14 @@ class BinST{
 
         BSTnode<D>* parent(BSTnode<D>* BST,D key)
         {
-            if (key<BST->data)
+            if (key<BST->key)
             {
-                if (BST->lc->data == key) return BST;
+                if (BST->lc->key == key) return BST;
                 else return parent(BST->lc,key);
             }
-            else if (key>BST->data)
+            else if (key>BST->key)
             {
-                if (BST->rc->data == key) return BST;
+                if (BST->rc->key == key) return BST;
                 else return parent(BST->rc,key);
             }
             else return NULL;
@@ -128,7 +128,7 @@ class BinST{
         void predsuccU(BSTnode<D>* root,BSTnode<D>*&pre,BSTnode<D>*&succ,D key)
         {
             if (root==NULL) return ;
-            if (root->data == key)
+            if (root->key == key)
             {
                 if (root->lc !=NULL)
                     pre = maxU(root->lc);
@@ -138,7 +138,7 @@ class BinST{
                 return;
             }
 
-            if (root->data<key)
+            if (root->key<key)
             {
                 pre=root;
                 predsuccU(root->rc,pre,succ,key);
@@ -160,10 +160,10 @@ class BinST{
             if (T==NULL) 
                 return T; 
 
-            if (key < T->data)
+            if (key < T->key)
                 T->lc = delU(T->lc,key);
             
-            else if (key > T->data)
+            else if (key > T->key)
                 T->rc = delU(T->rc,key);
 
             else{ //key was found
@@ -181,8 +181,8 @@ class BinST{
 
                 BSTnode<D>* tmp = minU(T->rc);
                 
-                T->data = tmp->data;
-                T->rc = delU(T->rc,T->data);
+                T->key = tmp->key;
+                T->rc = delU(T->rc,T->key);
             }
 
             return T;
@@ -205,7 +205,7 @@ class BinST{
                 tmp = q.front();
                 q.pop();
 
-                cout<<tmp->data<<" ";
+                cout<<tmp->key<<" ";
                 if (tmp->lc != NULL)
                     q.push(tmp->lc);
                 
@@ -242,16 +242,16 @@ int main()
     {
         cin>>k;
         if (k==-1) break;
-        //cout<<parent(BST,k)->data<<"\n";
+        //cout<<parent(BST,k)->key<<"\n";
         T.predsucc(pre,succ,k);
         if (pre!=NULL)
         {
-            cout<<"predecessor : "<<pre->data<<" ";
+            cout<<"predecessor : "<<pre->key<<" ";
         }
         else cout<<"No predecessor ";
         if (succ!=NULL)
         {
-            cout<<"successor : "<<succ->data<<'\n';
+            cout<<"successor : "<<succ->key<<'\n';
         }
         else cout<<" No successor\n";
         pre = succ =NULL;
@@ -263,7 +263,7 @@ int main()
         cin>>k;
         if (k==-1) break;
         delnode = T.del(k);
-        cout<<delnode->data<<" deleted from tree\n";
+        cout<<delnode->key<<" deleted from tree\n";
         cout<<"current level order : ";
         T.bfs();
         cout<<"\n";
