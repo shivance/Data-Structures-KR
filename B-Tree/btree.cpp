@@ -80,14 +80,42 @@ void inorder(BTnode*BT)
     inorder(BT->way[i]);
 }
 
-void sortL(BTnode*&leaf)
+void nodeSplit(BSTnode*&leaf,BSTnode*&newnode,int k,int& median,int &o)
 {
-    int p = leaf->cnt-1;
-    while(leaf->key[p]<leaf->key[p-1] && p>=1)
+    o = false;
+    vector<int>temp;
+    for (int i=0;i<cnt_l;++i) 
+        temp.push_back(leaf->key[i]);
+    temp.push_back(k);
+
+    sort(temp.begin(),temp.end());
+
+
+    int mid = temp[temp.size()/2];
+    median = mid;
+
+    if (mid==k) o = true;
+
+    if (d&1) start = d/2+1;
+    else start = d/2;
+
+    //shift pointers easily
+    int i,j=0;   
+    for (int i=start;i<d-1;++i,++j){
+        newchild->way[j] = leaf->way[i];
+        leaf->way[i]=NULL;
+    }
+
+    for (int i=0;i<leaf->cnt;++i) leaf->key[i]=INT_MAX;
+
+    i=0;j=0;
+    for (i,j;i<temp.size();++i)
     {
-        swap(leaf->key[p],leaf->key[p-1]);
-        swapptr(leaf->way[p+1],leaf->way[p]);
-        --p;
+        if (i<=temp.size()/2)
+            leaf->key[i] = temp[i];
+        else{
+            newchild->key[j] = temp[i];++j;
+        }
     }
 }
 
@@ -112,12 +140,13 @@ BTnode* search(BTnode*BT,int k)
     else 
         return search(BT->way[i],k);
 
-    //return NULL;
+    return NULL;
 }
 
 
-BTnode* parent(BTnode* BT,BTnode* node)
+BTnode* parentU(BTnode* BT,BTnode* node)
 {
+    // if (BT==node) 
     int i;
     for (i=0;i<BT->cnt;++i)
     {
@@ -125,6 +154,12 @@ BTnode* parent(BTnode* BT,BTnode* node)
     }
     if (BT->way[i] == node) return BT;
     else return parent(BT->way[i],node);
+}
+
+BTnode* parent(BTnode* BT,BTnode* node)
+{
+    if (BT == node) return NULL;
+    return parentU(BT,node);
 }
 
 
@@ -158,65 +193,21 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
     {
         int cnt_l = leaf->cnt;
         BTnode* newchild = new BTnode(d);
-        vector<int>tmp;
-        for (int i=0;i<leaf->cnt;++i) 
-        {   
-            tmp.push_back(leaf->key[i]);
-            leaf->key[i]= INT_MAX;
-        }
         
-        leaf->cnt = 0;
-        tmp.push_back(k);
-        cout<<"added overflow k = "<<k<<"\n";
-        sort(tmp.begin(),tmp.end());
-        int mid_idx = tmp.size()/2  ;
-        int mid = tmp[mid_idx];
+        bool o; int median;
+        nodeSplit(leaf,newchild,key,o,median);
 
-        for (int i=0;i<tmp.size();++i)
-        {
-            if (tmp[i]<mid) 
-            {
-                leaf->key[leaf->cnt] = (tmp.at(i));
-                leaf->cnt++;
-            }
-            else if (tmp[i]>mid) 
-            {
-                newchild->key[newchild->cnt] = (tmp.at(i));
-                newchild->cnt++;
-            }
-        }
-        sortL(newchild);
-        sortL(leaf);
+        cout<<"added overflow k = "<<k<<"\n";
         cout<<"Node splitted into : ";
         cout<<"Left : ";printarr(leaf->key,leaf->cnt);cout<<" right : ";printarr(newchild->key,newchild->cnt);cout<<"\n";
         // newly splitted right node
         
-        //adjusting pointers
-        int j;
-        if (mid == k) 
-        {
-            j= 1;
-            cout<<"mid == k \n";
-            o = true; // represents mid == key in parent
-        }
-        else j= 0;
-
-        for (int i=mid_idx+1;i<=cnt_l;++i,++j)
-        {
-            newchild->way[j] = leaf->way[i];
-            if (leaf->way[i]!=NULL){
-                cout<<"newchild->way["<<j<<"] ";
-                printarr(leaf->way[i]->key,leaf->way[i]->cnt);cout<<"\n";
-            }
-            leaf->way[i]=NULL;
-        }
-
         
         //middle to parent
         if (BT==leaf)
         {
             BTnode* newpar = new BTnode(d);
-            newpar->key[0] = mid;
+            newpar->key[0] = median;
             newpar->cnt++;
             newpar->way[0] = leaf;
             newpar->way[1] = newchild;
