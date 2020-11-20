@@ -1,3 +1,5 @@
+// compile with following command : g++ -std=gnu++14 avl.cpp
+
 #include <iostream>
 #include <deque>
 #include <queue>
@@ -129,28 +131,35 @@ class AVL
 
         AVLnode<D>* delU(AVLnode<D>* T,D key)
         {
-            if (T==NULL) 
-                return T; 
+            //cout<<"T->key : "<<T->key<<'\n';
+            if (T==NULL){ 
+                //cout<<"T==NULL\n";
+                return T;
+            } 
 
-            if (key < T->key)
+            if (key < T->key){
                 T->lc = delU(T->lc,key);
+                //cout<<"Now at T->key = "<<T->key<<"\n";
+            }
             
-            else if (key > T->key)
+            else if (key > T->key){
                 T->rc = delU(T->rc,key);
+                //cout<<"Now at T->key = "<<T->key<<"\n";
+            }
 
             else{ //key was found
                 // returns leaf as well
                 if(T->lc==NULL)
                 {
-                    AVLnode<D>* tmp = T->rc;
-                    free(T);
-                    return tmp;
+                    //cout<<"Check T->lc == NULL\n";
+                    //cout<<"T->lc==NULL returned\n";
+                    return T->rc;
                 }
                 else if (T->rc==NULL)
                 {
-                    AVLnode<D>* tmp = T->lc;
-                    free(T);
-                    return tmp;
+                    //cout<<"Check T->rc == NULL\n";
+                    //cout<<"T->rc==NULL returned\n";
+                    return T->lc;
                 }
 
                 // none of child is  null
@@ -159,7 +168,11 @@ class AVL
                 T->rc = delU(T->rc,T->key);
             }
 
-            if (T==NULL) return T;
+            if (T==NULL) 
+            {
+                //cout<<"T=NULL 2 returned\n";
+                return T;
+            }
 
             T->h = 1 + max(height(T->lc),height(T->rc));
 
@@ -167,24 +180,31 @@ class AVL
 
             // LL -> Right rotation
             if (load > 1 && loadf(T->lc)>=0)
-                return rightR(T);
+            {
+                //cout<<"Right rotation \n";
+                T = rightR(T);
+            }
 
             // RR -> left rotation
-            else if (load < -1 && loadf(T->rc)<=0)
-                return leftR(T);
-            
+            else if (load < -1 && loadf(T->rc)<=0){
+                //cout<<"Left Rotation \n";
+                T = leftR(T);
+                
+            }
 
             // LR -> right left rotation
             else if (load > 1 && loadf(T->lc) <0)
             {
+                //cout<<"Right left \n";
                 T->lc = leftR(T->lc);
-                return rightR(T);
+                T =  rightR(T);
             }
 
             // RR -> left right 
             else if (load < -1 && loadf(T->rc)>0){
+                //cout<<"left right\n";
                 T->rc = rightR(T->rc);
-                return leftR(T);
+                T = leftR(T);
             }
 
             return T;
@@ -237,6 +257,7 @@ class AVL
 
         void bfsU(AVLnode<D> *& T)
         {
+            if(T==NULL) return;
             queue<AVLnode<D>*> q;
             q.push(T);
 
@@ -272,10 +293,7 @@ int main()
         cin>>a;
         if (a==-1) break;
         T.insert(a);
-
-        T.inorder();
         cout<<"\n";
-        //cout<<"\nroot -> key = "<<T->key<<"\n";
     }
     T.bfs();
 
