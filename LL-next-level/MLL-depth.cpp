@@ -48,11 +48,11 @@ using namespace std;
 class mlnode
 {
 public:
-	int data;
+	int key;
 	mlnode* next;mlnode* dlink;
 	mlnode()
 	{
-		data = INT_MIN;
+		key = INT_MIN;
 		next = NULL;
 		dlink = NULL;
 	}
@@ -69,14 +69,14 @@ void inputLL(mlnode* tmp)
 	{
 		cin>>a;
 		mlnode* tmpn = new mlnode();
-		tmpn->data = a;
+		tmpn->key = a;
 		tmp->dlink = tmpn;
 		inputLL(tmpn);
 		//return k baad control yaha 
 		cin>>a;
 		if (a==-1) return;
 		mlnode* tmpx = new mlnode();
-		tmpx->data = a;
+		tmpx->key = a;
 		tmp->next = tmpx;
 		inputLL(tmpx);
 	}
@@ -85,7 +85,7 @@ void inputLL(mlnode* tmp)
 		cin>>a;
 		if (a==-1) return;
 		mlnode* tmpn = new mlnode();
-		tmpn->data = a;
+		tmpn->key = a;
 		tmp->next = tmpn;
 		inputLL(tmpn);
 
@@ -98,11 +98,11 @@ void printMLdepth(mlnode* tmp)
 	//cout<<"executed\n";
 	if (tmp->dlink==NULL && tmp->next==NULL)
 	{
-		cout<<tmp->data<<" ";
+		cout<<tmp->key<<" ";
 		return ;
 	}
 
-	cout<<tmp->data<<" ";
+	cout<<tmp->key<<" ";
 
 	if (tmp->dlink != NULL)
 	{
@@ -117,7 +117,7 @@ int main()
 	int a;
 	mlnode* head = new mlnode();
 	cin>>a;
-	head->data = a;
+	head->key = a;
 	tmp = head;
 
 	inputLL(head);

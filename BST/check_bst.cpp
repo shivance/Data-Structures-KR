@@ -8,7 +8,7 @@ class TreeNode
 {
 public:
     TreeNode* left;
-    int data;
+    int key;
     TreeNode* right;
     TreeNode()
     {
@@ -25,26 +25,26 @@ void convT(TreeNode*&T)
     if (T->left!=NULL && T->right==NULL)
     {
         int a,b;
-        a = T->data;b = T->left->data;
-        T->data = max(a,b);T->left->data = min(a,b);
+        a = T->key;b = T->left->key;
+        T->key = max(a,b);T->left->key = min(a,b);
         convT(T->left);
     }
 
     else if (T->left==NULL && T->right !=NULL)
     {
         int a,b;
-        a = T->data;b = T->right->data;
-        T->data = min(a,b);T->right->data = max(a,b);
+        a = T->key;b = T->right->key;
+        T->key = min(a,b);T->right->key = max(a,b);
         convT(T->right);
     }
 
     else{
         vector<int>v(3,0);
-        v[0]=T->data;v[1]=T->left->data;v[2]=T->right->data;
+        v[0]=T->key;v[1]=T->left->key;v[2]=T->right->key;
         sort(v.begin(),v.end());
-        T->left->data = v[0];
-        T->data = v[1];
-        T->right->data = v[2];
+        T->left->key = v[0];
+        T->key = v[1];
+        T->right->key = v[2];
         convT(T->left);
         convT(T->right);
     }
@@ -56,7 +56,7 @@ int minT(TreeNode*T)
     while(T->left!=NULL && T->right==NULL)
         T=T->left;
     
-    return T->data;
+    return T->key;
 }
 
 int maxT(TreeNode*T)
@@ -65,7 +65,7 @@ int maxT(TreeNode*T)
     while(T->left !=NULL && T->right!=NULL)
         T=T->right;
 
-    return T->data;
+    return T->key;
 }
 
 bool check_bst(TreeNode* &T)
@@ -76,21 +76,21 @@ bool check_bst(TreeNode* &T)
         if (T->left !=NULL && T->right ==NULL)
         {
             int a = maxT(T->right);
-            //b=T->left->data;
+            //b=T->left->key;
             //if (a==b) return false;
-            if (T->data > a)
+            if (T->key > a)
             {
                 o = check_bst(T->left);
                 if (!o)
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
                 return true;
             }
             else 
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
         }
@@ -98,19 +98,19 @@ bool check_bst(TreeNode* &T)
         {
             int b = minT(T->right);
             //if (a==b) return false;
-            if (T->data < b)
+            if (T->key < b)
             {
                 o = check_bst(T->right);
                 if (!o) 
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
                 else return true;
             }
             else 
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
         }
@@ -119,19 +119,19 @@ bool check_bst(TreeNode* &T)
         {
             int a = maxT(T->left);
             int b = minT(T->right);
-            if (a<T->data && T->data < b)
+            if (a<T->key && T->key < b)
             {   
                 o = check_bst(T->left);
                 if (!o) 
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
 
                 o = check_bst(T->right);
                 if (!o)
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
 
@@ -139,7 +139,7 @@ bool check_bst(TreeNode* &T)
             }
             else 
                 {
-                    cout<<T->data<<"\n";
+                    cout<<T->key<<"\n";
                     return false;
                 }
         }
@@ -154,7 +154,7 @@ void inorder(TreeNode* T)
     {
         inorder(T->left);
     }
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     if (T->right != NULL)
     {
         inorder(T->right);
@@ -168,41 +168,41 @@ int main()
     int a;
     TreeNode* T = new TreeNode(),*tmp;
     //Input 1
-    T->data = 7; 
-    tmp = new TreeNode();tmp->data = 9;
+    T->key = 7; 
+    tmp = new TreeNode();tmp->key = 9;
     T->left = tmp;
-    tmp = new TreeNode();tmp->data = 6;
+    tmp = new TreeNode();tmp->key = 6;
     T->right = tmp;
-    tmp = new TreeNode();tmp->data = 2;
+    tmp = new TreeNode();tmp->key = 2;
     T->left->left = tmp;
-    tmp = new TreeNode();tmp->data = 4;
+    tmp = new TreeNode();tmp->key = 4;
     T->left->right = tmp;
-    tmp = new TreeNode();tmp->data = 1;
+    tmp = new TreeNode();tmp->key = 1;
     T->right->left = tmp;
-    tmp = new TreeNode();tmp->data = 3;
+    tmp = new TreeNode();tmp->key = 3;
     T->right->right = tmp;
-    tmp = new TreeNode();tmp->data = 8;
+    tmp = new TreeNode();tmp->key = 8;
     T->left->left->left = tmp;
-    tmp = new TreeNode();tmp->data = 11;
+    tmp = new TreeNode();tmp->key = 11;
     T->left->left->right = tmp;
     
     
     cout<<minT(T)<<" = min "<<maxT(T)<<" = max";
     //Input 2
-    /*T->data = 5;
-    tmp = new TreeNode();tmp->data = 8;
+    /*T->key = 5;
+    tmp = new TreeNode();tmp->key = 8;
     T->left =tmp;
-    tmp = new TreeNode();tmp->data = 11;
+    tmp = new TreeNode();tmp->key = 11;
     T->right = tmp;
-    tmp = new TreeNode();tmp->data = 2;
+    tmp = new TreeNode();tmp->key = 2;
     T->right->left = tmp;
-    tmp = new TreeNode();tmp->data = 4;
+    tmp = new TreeNode();tmp->key = 4;
     T->right->right = tmp;
-    tmp = new TreeNode();tmp->data = 1;
+    tmp = new TreeNode();tmp->key = 1;
     T->right->left->left = tmp;
-    tmp = new TreeNode();tmp->data = 10;
+    tmp = new TreeNode();tmp->key = 10;
     T->right->left->right = tmp;
-    tmp = new TreeNode();tmp->data = 6;
+    tmp = new TreeNode();tmp->key = 6;
     T->right->left->left->left =tmp;*/
     bool o = check_bst(T);
     if (o) cout<<"YES\n";
@@ -213,7 +213,7 @@ int main()
     o = check_bst(T);
     if (o) cout<<"YES\n";
     else cout<<"NO\n";
-    cout<<T->left->data<<endl<<endl;
+    cout<<T->left->key<<endl<<endl;
     return 0;
 }
 

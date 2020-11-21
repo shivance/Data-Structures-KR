@@ -3,6 +3,7 @@
 #include <climits>
 #include <algorithm>
 #include <vector>
+#include <queue>
 using namespace std;
 
 
@@ -119,6 +120,27 @@ BTnode* parent(BTnode* BT,BTnode* node)
     else return parent(BT->way[i],node);
 }
 
+void level(BTnode*&BT)
+{
+    BTnode* tmp;
+    queue<BTnode*> q;
+
+    q.push(BT);
+    while(!q.empty())
+    {
+        tmp = q.front();
+        printarr(tmp->key,tmp->cnt);
+        q.pop();
+
+        int i;
+        for (i=0;i<=tmp->cnt;++i)
+        {
+            if (tmp->way[i] == NULL) continue;
+            q.push(tmp->way[i]);
+        }
+    }
+}
+        
 
 void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
 {
@@ -223,6 +245,111 @@ void Add(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
     }
 }
 
+void AddLeaf(BTnode* & BT,BTnode* &leaf,BTnode*&ri8,int d,int k,bool &o)
+{
+    
+    //no overflow
+    if (leaf->cnt < d-1)
+    {
+        leaf->key[leaf->cnt] = k;
+        ++(leaf->cnt);
+        sortL(leaf);                
+        int idx;    
+        getidx(leaf->key,leaf->cnt,idx,k);
+        ri8 = leaf->way[idx+1];
+    }
+
+    else 
+    {
+        int cnt_l = leaf->cnt;
+        BTnode* newchild = newBTnode(d);
+        vector<int>tmp;
+        for (int i=0;i<leaf->cnt;++i) 
+        {
+            tmp.push_back(leaf->key[i]);
+            leaf->key[i]= INT_MAX;
+        }
+        
+        leaf->cnt = 0;
+        tmp.push_back(k);
+        
+        sort(tmp.begin(),tmp.end());
+        int mid_idx = tmp.size()/2;
+        int mid = tmp[mid_idx];
+
+        for (int i=0;i<tmp.size();++i)
+        {
+            if (tmp[i]<mid) 
+            {
+                leaf->key[leaf->cnt] = tmp[i];
+                leaf->cnt++;
+            }
+            else if (tmp[i]>=mid) 
+            {
+                newchild->key[newchild->cnt] = tmp[i];
+                newchild->cnt++;
+            }
+        }
+        sortL(newchild);
+        sortL(leaf);
+        
+        //adjusting pointers
+        int j;
+        if (mid == k) 
+        {
+            j= 1;
+            o = true; // represents mid == key in parent
+        }
+        else j= 0;
+
+        for (int i=mid_idx;i<=cnt_l;++i,++j)
+        {
+            newchild->way[j] = leaf->way[i];
+            leaf->way[i]=NULL;
+        }
+
+        
+        //middle to parent
+        if (BT==leaf)
+        {
+            BTnode* newpar = newBTnode(d); 
+            newpar->key[0] = mid;
+            newpar->cnt++;
+            newpar->way[0] = leaf;
+            newpar->way[1] = newchild;
+            BT = newpar; // update root when overflow in root
+            ri8 = newchild;
+        }
+        else
+        {
+            BTnode* par = parent(BT,leaf);int idxn;
+            
+            int c = par->cnt;
+
+            o = false;
+            Add(BT,par,ri8,d,mid,o);
+            
+            if (c<d-1){
+                getidx(par->key,par->cnt,idxn,mid);
+                par->way[idxn+1] = newchild;
+            }
+            else
+            {
+                if (o) 
+                    ri8->way[0] = newchild;
+
+                else{
+                    getidx(ri8->key,ri8->cnt,idxn,mid);
+                    ri8->way[idxn+1] = newchild;
+                }
+            }
+            return;
+        }
+    }
+}
+
+
+
 
 
 
@@ -247,8 +374,9 @@ int main()
         leaf = search(BT,k);
         ri8 = NULL;
         o = false;
-        Add(BT,leaf,ri8,d,k,o);
+        AddLeaf(BT,leaf,ri8,d,k,o);
     }
+    level(BT);
     inorder(BT);
     
     return 0;

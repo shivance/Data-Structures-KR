@@ -12,7 +12,7 @@ class bstnode
 {
 public:
     bstnode* lchild;
-    int data;
+    int key;
     bstnode* rchild;
     bool flg;
     bstnode()
@@ -26,7 +26,7 @@ void printvec(vector<bstnode*>&vec)
 {
     for (int i=0;i<vec.size();++i)
     {
-        cout<<vec[i]->data<<" ";
+        cout<<vec[i]->key<<" ";
     }
     cout<<endl;
 }
@@ -60,7 +60,7 @@ void Kmin(bstnode*&T,bstnode*&m)
         Kmin(T->lchild,m);
     }
     
-    if (T->data < m->data && T->flg == false)
+    if (T->key < m->key && T->flg == false)
     {
         m = T;
     }
@@ -79,7 +79,7 @@ void inorder(bstnode* &T)
     {
         inorder(T->lchild);
     }
-    cout<<T->data<<" ";
+    cout<<T->key<<" ";
     if (T->rchild != NULL)
     {
         inorder(T->rchild);
@@ -89,9 +89,9 @@ void inorder(bstnode* &T)
 void swap(bstnode*& a,bstnode* &b)
 {
     int tmp;
-    tmp = a->data;
-    a->data = b->data;
-    b->data = tmp;
+    tmp = a->key;
+    a->key = b->key;
+    b->key = tmp;
 }
 
 int main()
@@ -100,42 +100,42 @@ int main()
     bstnode* T = new bstnode(),*tmp;
     //Input 1
     /*
-    T->data = 7; 
-    tmp = new bstnode();tmp->data = 9;
+    T->key = 7; 
+    tmp = new bstnode();tmp->key = 9;
     T->lchild = tmp;
-    tmp = new bstnode();tmp->data = 6;
+    tmp = new bstnode();tmp->key = 6;
     T->rchild = tmp;
-    tmp = new bstnode();tmp->data = 2;
+    tmp = new bstnode();tmp->key = 2;
     T->lchild->lchild = tmp;
-    tmp = new bstnode();tmp->data = 4;
+    tmp = new bstnode();tmp->key = 4;
     T->lchild->rchild = tmp;
-    tmp = new bstnode();tmp->data = 1;
+    tmp = new bstnode();tmp->key = 1;
     T->rchild->lchild = tmp;
-    tmp = new bstnode();tmp->data = 3;
+    tmp = new bstnode();tmp->key = 3;
     T->rchild->rchild = tmp;
-    tmp = new bstnode();tmp->data = 8;
+    tmp = new bstnode();tmp->key = 8;
     T->lchild->lchild->lchild = tmp;
-    tmp = new bstnode();tmp->data = 11;
+    tmp = new bstnode();tmp->key = 11;
     T->lchild->lchild->rchild = tmp;
     */
 
 
     //Input 2
     
-    T->data = 5;
-    tmp = new bstnode();tmp->data = 8;
+    T->key = 5;
+    tmp = new bstnode();tmp->key = 8;
     T->lchild =tmp;
-    tmp = new bstnode();tmp->data = 11;
+    tmp = new bstnode();tmp->key = 11;
     T->rchild = tmp;
-    tmp = new bstnode();tmp->data = 2;
+    tmp = new bstnode();tmp->key = 2;
     T->rchild->lchild = tmp;
-    tmp = new bstnode();tmp->data = 4;
+    tmp = new bstnode();tmp->key = 4;
     T->rchild->rchild = tmp;
-    tmp = new bstnode();tmp->data = 1;
+    tmp = new bstnode();tmp->key = 1;
     T->rchild->lchild->lchild = tmp;
-    tmp = new bstnode();tmp->data = 10;
+    tmp = new bstnode();tmp->key = 10;
     T->rchild->lchild->rchild = tmp;
-    tmp = new bstnode();tmp->data = 6;
+    tmp = new bstnode();tmp->key = 6;
     T->rchild->lchild->lchild->lchild =tmp;
     
     vector<bstnode*> in;
@@ -147,11 +147,11 @@ int main()
     {
         tmpn = in[i];
         m = new bstnode();
-        m->data = INT_MAX;
+        m->key = INT_MAX;
         Kmin(T,m);
         tmpn->flg = true;
     
-        swap(tmpn->data,m->data);
+        swap(tmpn->key,m->key);
     }
     cout<<"Inorder Traversal of tree : \n";
     inorder(T);

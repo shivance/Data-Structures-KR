@@ -5,11 +5,11 @@ using namespace std;
 class mlnode
 {
 public:
-	int data;
+	int key;
 	mlnode* next;mlnode* dlink;
 	mlnode()
 	{
-		data = INT_MIN;
+		key = INT_MIN;
 		next = NULL;
 		dlink = NULL;
 	}
@@ -26,7 +26,7 @@ int main()
 	mlnode *prev;
 	mlnode *tmp_cur_d;
 	cin>>a;
-	head->data = a;
+	head->key = a;
 	tmp = head;
 
 	cin>>drctn; 
@@ -40,7 +40,7 @@ int main()
 			cin>>k;
 			if (k==-1) break;
 			tmp_cur_d = new mlnode();
-			tmp_cur_d->data = k;
+			tmp_cur_d->key = k;
 			tmp_up->dlink = tmp_cur_d;
 			tmp_up = tmp_cur_d;
 		}
@@ -57,7 +57,7 @@ int main()
 		if (a == -2 ) break;
 		cin>>drctn;
 		tmp = new mlnode();
-		tmp->data = a;
+		tmp->key = a;
 	
 		prev->next = tmp;
 
@@ -75,7 +75,7 @@ int main()
 				}
 
 				tmp_cur_d = new mlnode();
-				tmp_cur_d->data = k;
+				tmp_cur_d->key = k;
 				tmp_up->dlink = tmp_cur_d;
 				tmp_up = tmp_cur_d;
 			}
@@ -101,7 +101,7 @@ int main()
 				tmp_cur_d = tmp;
 				while(tmp_cur_d->dlink!=NULL)
 				{
-					//cout<<tmp_cur_d->data<<"\n";
+					//cout<<tmp_cur_d->key<<"\n";
 					tmp_cur_d = tmp_cur_d->dlink;
 				}
 				tmp_cur_d->next = tmp->next;
@@ -110,7 +110,7 @@ int main()
 			}
 			else
 			{
-				//cout<<tmp->data<<" ";
+				//cout<<tmp->key<<" ";
 				tmp=tmp->next;
 			}
 		}
@@ -126,20 +126,20 @@ int main()
 	{
 		if (tmp->next!=NULL)
 		{
-			cout<<tmp->data<<" ";
+			cout<<tmp->key<<" ";
 			tmp=tmp->next;
 		}
 
 		else if (tmp->dlink!=NULL)
 		{
-			cout<<tmp->data<<" ";
+			cout<<tmp->key<<" ";
 			tmp=tmp->dlink;
 		}
 		else if (tmp->next == NULL && tmp->dlink == NULL)
 		{
-			if (tmp->data>INT_MIN)
+			if (tmp->key>INT_MIN)
 			{
-				cout<<tmp->data<<"\n";
+				cout<<tmp->key<<"\n";
 			}
 			break;
 		}

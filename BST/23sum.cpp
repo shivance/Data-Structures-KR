@@ -9,7 +9,7 @@ class bstnode
 {
     public:
     bstnode* lchild;
-    int data;
+    int key;
     bstnode* rchild;
     int t;
     bstnode(int k)
@@ -32,7 +32,7 @@ void prntvecnode(vector <bstnode*>&dt)
 {
     for (int i=0;i<dt.size();++i)
     {
-        cout<<dt[i]->data<<" "<<dt[i]->t<<endl;
+        cout<<dt[i]->key<<" "<<dt[i]->t<<endl;
     }
     cout<<endl;
 }
@@ -40,7 +40,7 @@ void prntvecnode(vector <bstnode*>&dt)
 
 bool sortf(bstnode* &n1,bstnode* &n2)
 {
-    return (n1->data< n2->data);
+    return (n1->key< n2->key);
 }
 
 void insert(bstnode* &T,int k,int l,int Tn)
@@ -48,17 +48,17 @@ void insert(bstnode* &T,int k,int l,int Tn)
     if (T==NULL)
     {
         T = new bstnode(Tn);
-        T->data = k;
+        T->key = k;
     }
     else
     {
-        if (T->data == k)
+        if (T->key == k)
             return;
-        else if (k<T->data)
+        else if (k<T->key)
         {
             insert(T->lchild,k,l+1,Tn);
         }
-        else if (k> T->data)
+        else if (k> T->key)
         {
             insert(T->rchild,k,l+1,Tn);
         }
@@ -117,8 +117,8 @@ int main()
     map<int,int>mT;
     for (int i=0;i<dt.size();++i)
     {
-        mDT[dt[i]->data] = true;
-        mT[dt[i]->data] = dt[i]->t;
+        mDT[dt[i]->key] = true;
+        mT[dt[i]->key] = dt[i]->t;
     }
     int sum;
     map<int,bool>::iterator it,itr,itx;

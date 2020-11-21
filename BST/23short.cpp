@@ -9,7 +9,7 @@ class bstnode
 {
     public:
     bstnode* lchild;
-    int data;
+    int key;
     bstnode* rchild;
     int t;
     bstnode(int k)
@@ -34,17 +34,17 @@ void insert(bstnode* &T,int k,int l,int Tn)
     if (T==NULL)
     {
         T = new bstnode(Tn);
-        T->data = k;
+        T->key = k;
     }
     else
     {
-        if (T->data == k)
+        if (T->key == k)
             return;
-        else if (k<T->data)
+        else if (k<T->key)
         {
             insert(T->lchild,k,l+1,Tn);
         }
-        else if (k> T->data)
+        else if (k> T->key)
         {
             insert(T->rchild,k,l+1,Tn);
         }
@@ -59,8 +59,8 @@ void inorderU(bstnode* T,map<int,bool>&mDT,map<int,int>&mT)
     {
         inorderU(T->lchild,mDT,mT);
     }
-    mDT[T->data] = true;
-    mT[T->data] = T->t;
+    mDT[T->key] = true;
+    mT[T->key] = T->t;
     if (T->rchild != NULL)
     {
         inorderU(T->rchild,mDT,mT);
