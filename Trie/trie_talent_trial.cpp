@@ -46,14 +46,14 @@ void insert(trienode*&T,string str)
     strnode* leaf = new strnode(str);
     int index;
     strnode* s = NULL;
-    
+    string tmpstr;
 
-    int i =0,j=0;
+    int i =0;
     while(i<str.length())
     {
         index = str[i]-'A';
         if (tmp->child[index]==NULL && tmp->leaf[index]==NULL){
-            tmp->leaf[index] = leaf;
+            tmp->leaf[index] = new strnode(str);
             //tmp->s = s;
             return;
         }
@@ -61,9 +61,10 @@ void insert(trienode*&T,string str)
         if (tmp->child[index]==NULL && tmp->leaf[index]!=NULL){
             s = tmp->leaf[index];
             tmp->leaf[index] = NULL;
-            string tmpstr=s->str;
-            while(tmpstr[i]==str[i] && i<min(tmpstr.length(),str.length()))
+            tmpstr=s->str;
+            while(tmpstr[i]==str[i] && i<str.length() )
             {
+                cout<<"HERE\n";
                 index = str[i]-'A';
                 tmp->child[index] = new trienode();
                 tmp = tmp->child[index];
@@ -71,16 +72,15 @@ void insert(trienode*&T,string str)
             }
             tmp->leaf[tmpstr[i]-'A'] = new strnode(tmpstr);
             tmp->leaf[str[i]-'A'] = new strnode(str);
-
-            return;
+            tmp->s = new strnode(str);
         }
 
-        if(!tmp->child[index]){
+        if(tmp->child[index]!=NULL){
             tmp = tmp->child[index];++i;
-        }
-
-        tmp->s = new strnode(str);
+            index = str[i]-'A';
+        }       
     }
+    
 }
 
 
@@ -91,11 +91,14 @@ void print(trienode*T)
         if (T->leaf[i])
         {
             cout<<T->leaf[i]->str<<" ";
+        }
+        if (T->child[i])
+            print(T->child[i]);
+
+        if(T->s){
+            cout<<T->s->str<<" ";
             return;
         }
-        if(T->s)
-            cout<<T->s->str<<" ";
-        print(T->child[i]);
     }
 }
 
@@ -109,9 +112,12 @@ int main()
         cin>>s;
         if (s=="#") break;
         insert(T,s);
+        print(T);
+        cout<<"\n";
     }
-    print(T);
+    //print(T);
 
     return 0;
 }
 
+// AAB CABB BAA ABBBC BCCCAA BC A ABB #
