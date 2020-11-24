@@ -50,7 +50,7 @@ bool search(trienode*T,vector<char>keys,string str)
     trienode* tmp = T;
 
     vector<char>::iterator it;
-    for (i=0;i<str.length()-1;++i)
+    for (i=0;i<str.length();++i)
     {
         index = find(keys.begin(),keys.end(),str[i]) - keys.begin();
         if (!tmp->child[index]) 
