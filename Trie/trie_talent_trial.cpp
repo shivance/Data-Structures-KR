@@ -58,13 +58,15 @@ void insert(trienode*&T,string str)
             return;
         }
 
-        if (tmp->child[index]==NULL && tmp->leaf[index]!=NULL){
+        if (tmp->leaf[index]!=NULL){
             s = tmp->leaf[index];
             tmp->leaf[index] = NULL;
             tmpstr=s->str;
-            while(tmpstr[i]==str[i] && i<str.length() )
+            cout<<tmpstr<<" "<<str<<" i = "<<i<<"\n";
+            cout<<"HERE\n";
+            while(tmpstr[i]==str[i] && i <min(str.length(),tmpstr.length()))
             {
-                cout<<"HERE\n";
+                
                 index = str[i]-'A';
                 tmp->child[index] = new trienode();
                 tmp = tmp->child[index];
@@ -72,14 +74,20 @@ void insert(trienode*&T,string str)
             }
             tmp->leaf[tmpstr[i]-'A'] = new strnode(tmpstr);
             tmp->leaf[str[i]-'A'] = new strnode(str);
-            tmp->s = new strnode(str);
+            //tmp->s = new strnode(str);
+            return;
         }
+        
 
-        if(tmp->child[index]!=NULL){
+        /*else if(tmp->child[index]!=NULL){
             tmp = tmp->child[index];++i;
             index = str[i]-'A';
-        }       
+        } */      
     }
+    
+    int idx = str[str.length()-1]-'A';
+    tmp = tmp->child[idx];
+    tmp->s = new strnode(str);
     
 }
 
@@ -90,13 +98,15 @@ void print(trienode*T)
     {
         if (T->leaf[i])
         {
-            cout<<T->leaf[i]->str<<" ";
+            cout<<"T->leaf : ";
+            cout<<T->leaf[i]->str<<"\n";
         }
         if (T->child[i])
             print(T->child[i]);
 
         if(T->s){
-            cout<<T->s->str<<" ";
+            cout<<"T->s :";
+            cout<<T->s->str<<"\n";
             return;
         }
     }

@@ -79,7 +79,7 @@ void bfs(bknode* T)
 	while(!q.empty())
 	{
 		tmp = q.front();
-		cout<<tmp->str<<" ";
+		cout<<tmp->str<<" "<<tmp->d<<" ";
         q.pop();
 
         vector<bknode*>::iterator it;
@@ -116,9 +116,10 @@ void recommend(bknode*T,string s,vector<string>&cl,int n)
 	}
 }
 
-void printvec(vector<string> vec){
+void printvec(vector<string> vec,string s,int n){
     for (int i=0;i<vec.size();++i){
-        cout<<vec[i]<<" ";
+        if (editDP(vec[i],s)<=n)
+            cout<<vec[i]<<" "<<editDP(vec[i],s);
     }
     cout<<"\n";
 }
@@ -135,6 +136,7 @@ int main()
         insert(T,s);
     }
     bfs(T);
+    cout<<"\n";
 
     int n;
     vector<string> cl; //candidate list
@@ -146,7 +148,7 @@ int main()
         cin>>n;
         
         recommend(T,s,cl,n);
-        printvec(cl);
+        printvec(cl,s,n);
     }  
     
     return 0;
