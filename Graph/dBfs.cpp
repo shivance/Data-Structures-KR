@@ -1,3 +1,5 @@
+// undirected
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -5,16 +7,6 @@
 
 using namespace std;
 
-void printGraph(vector<list<int> > &G)
-{
-    for (int v = 0; v < G.size(); ++v)
-    {
-        list<int>::iterator it;
-        for (it= G[v].begin();it!=G[v].end();++it)
-            cout<<*it<<" ";
-        cout << "\n";
-    }
-}
 
 void addEdge(vector<list<int> >&G, int u, int v)
 {
