@@ -68,18 +68,24 @@ vector<int> BFS(vector<list<lnode*> >&G, int v, int V)
 }
 
 
-void updateGraph(vector<list<lnode*> >G,vector<list<lnode*> >RG,vector<int>&dist,vector<int>&prev_vertex,int src){
+void updateGraph(vector<list<lnode*> >G,vector<int>&dist,vector<int>&prev_vertex,int src){
     vector<int>bfs = BFS(G, src,dist.size());
     //printvec(bfs);
     list<lnode*>::iterator it;
 
     for (int i=0;i<bfs.size();++i){
+        //cout<<"Current vertex = "<<bfs[i]<<"\n";
         //explore all child of bfs[i] and update -> curr = bfs[i]
         for (it = G[bfs[i]].begin();it!=G[bfs[i]].end();++it)
         {
-            if (dist[(*it)->v]>= dist[bfs[i]]+(*it)->wt){
+            if ((*it)->v==src) continue;
+            else if (dist[(*it)->v]<= dist[bfs[i]]+(*it)->wt){
+                //cout<<"Vertex "<<(*it)->v<< " updated from "<<dist[(*it) ->v]<<" to ";
+                int k = prev_vertex[(*it)->v];
                 dist[(*it)->v] = dist[bfs[i]]+(*it)->wt;
                 prev_vertex[(*it)->v] = bfs[i];
+                //cout<<dist[(*it)->v]<<"\n";
+                //cout<<"Previous vertex updated from "<<k <<" to "<<prev_vertex[(*it)->v]<<"\n";
             }
         }
     }
@@ -88,6 +94,7 @@ void updateGraph(vector<list<lnode*> >G,vector<list<lnode*> >RG,vector<int>&dist
 void Path(vector<int>dist,vector<int>prev_vertex,int src,int dstn)
 {
     cout<<"Total cost in path : "<<dist[dstn]<<endl;
+    
     int tmp = prev_vertex[dstn];
 
     vector<int>v;
@@ -104,7 +111,6 @@ void Path(vector<int>dist,vector<int>prev_vertex,int src,int dstn)
     return;
 }
 
-
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -114,7 +120,6 @@ int main()
     int n, m;
     cin >> n >> m;
     vector<list<lnode*> > G(n + 1, list<lnode*>());
-    vector<list<lnode*> > RG(n + 1, list<lnode*>());
     int u, v , wt;
 
     // n vertices
@@ -123,7 +128,7 @@ int main()
     {
         cin >> u >> v>> wt;
         addEdge(G, u, v, wt);
-        addEdge(RG, v, u, wt);
+        
     }
 
     
@@ -136,15 +141,16 @@ int main()
         cin>>dstn;
 
         vector<bool>visited(n+1,false);
-        vector<int>dist(n+1,INT_MAX);
+        vector<int>dist(n+1,INT_MIN);
         vector<int>prev_vertex(n+1,0);
-
+        //cout<<src<<"\n";
         prev_vertex[src] = src;
+        //cout<<prev_vertex[src]<<"\n";
         dist[src] = 0;
-        updateGraph(G,RG,dist,prev_vertex,src);
+        updateGraph(G,dist,prev_vertex,src);
 
-    
-        if (dist[dstn]==INT_MAX){
+        //printvec(prev_vertex);
+        if (dist[dstn]==INT_MIN){
            cout<<"No path \n";
         }
         else Path(dist,prev_vertex,src,dstn);
