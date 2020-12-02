@@ -1,4 +1,6 @@
 // UNWEIGHTED DIRECTED GRAPH </> ADJACENCY MATRIX
+// STRONGLY connected components
+
 
 #include <iostream>
 #include <vector>
@@ -81,15 +83,21 @@ void DFS(vector<vector<int> >&G,vector<GraphNode*> &node){
     
     sort(node.begin()+1,node.end(),sortfunc);
 
-    
+    for (int i=1;i<node.size();++i){
+        node[i]->visited = false;
+    }
 }
 
 void finalDFSUtil(vector<vector<int> >&RG,vector<GraphNode*> &node,int v){
+    if(node[v]->visited) return;
+
     node[v]->visited = true;
-    cout<<node[v]->order<<" "<<node[v]->pstn<<"\n";
-    for (int i=1;i<RG.size();++i){
-        if(RG[v][i] && !node[i]->visited)
+    cout<<v<<" ";
+
+    for (int i=1;i<node.size();++i){
+        if(RG[v][i]==1 && !(node[i]->visited)){            
             finalDFSUtil(RG,node,i);
+        }
     }
 }
 
@@ -125,23 +133,18 @@ int main(){
     //printGraph(G);
     DFS(G,node);
 
-    for (int i=1;i<node.size();++i){
-        node[i]->visited = false;
-    }
 
     vector<vector<int> > RG = reverseG(G);
+    
 
-    printGraph(RG);
 
-    /*for (int i=1;i<node.size();++i){
-        if (!node[i]->visited){
-            finalDFSUtil(RG,node,i);
-            cout<<"\n\n";
+    for (int i=1;i<node.size();++i){
+        if (!node[node[i]->order]->visited){
+            finalDFSUtil(RG,node,node[i]->order);
+            cout<<"\n";
         }
-    }*/
+    }
 
-    
-    
     return 0;
 }
 
