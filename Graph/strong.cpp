@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-#include <climits>
 #include <algorithm>
 
 using namespace std;
@@ -74,13 +73,19 @@ void DFSUtil(vector<vector<int> >&G,vector<GraphNode*> node,int v,int &num){
     ++num;
 }
 
-void DFS(vector<vector<int> >&G,vector<GraphNode*> &node){
+void PostorderNumb(vector<vector<int> >&G,vector<GraphNode*> &node){
     int num = 1;
     
     DFSUtil(G,node,2,num);
     DFSUtil(G,node,8,num);
     DFSUtil(G,node,7,num);
     
+    for (int i =1;i<node.size();++i){
+        if (!node[i]->visited)
+            DFSUtil(G,node,i,num);
+    }
+
+
     sort(node.begin()+1,node.end(),sortfunc);
 
     for (int i=1;i<node.size();++i){
@@ -124,19 +129,16 @@ int main(){
     vector<vector<int> > G(n+1,vector<int>(n+1,0));
     vector<GraphNode*> node(n+1,NULL);
 
-    // vector of nodes (extended visited array)
     for (int i=1;i<node.size();++i){
         node[i] = newGnode(i);
     }
     
     makeGraph(G,node); 
     //printGraph(G);
-    DFS(G,node);
-
+    PostorderNumb(G,node);
 
     vector<vector<int> > RG = reverseG(G);
     
-
 
     for (int i=1;i<node.size();++i){
         if (!node[node[i]->order]->visited){
