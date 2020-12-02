@@ -93,7 +93,7 @@ int main(){
 
     int n;//no of vertex
     cin>>n;
-    cout<<n<<"\n";
+
     vector<vector<int> > G(n+1,vector<int>(n+1,0));
     vector<GraphNode*> node(n+1,NULL);
 

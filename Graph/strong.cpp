@@ -49,7 +49,7 @@ void printGraph(vector<vector<int> >G){
     }
 }
 
-void makeGraph(vector<vector<int> >&mat,vector<GraphNode*> &node){
+void makeGraph(vector<vector<int> >&mat){
     int u,v;
     while(true){
         cin>>u;
@@ -75,16 +75,11 @@ void DFSUtil(vector<vector<int> >&G,vector<GraphNode*> node,int v,int &num){
 
 void PostorderNumb(vector<vector<int> >&G,vector<GraphNode*> &node){
     int num = 1;
-    
-    DFSUtil(G,node,2,num);
-    DFSUtil(G,node,8,num);
-    DFSUtil(G,node,7,num);
-    
+
     for (int i =1;i<node.size();++i){
         if (!node[i]->visited)
             DFSUtil(G,node,i,num);
     }
-
 
     sort(node.begin()+1,node.end(),sortfunc);
 
@@ -133,13 +128,13 @@ int main(){
         node[i] = newGnode(i);
     }
     
-    makeGraph(G,node); 
+    makeGraph(G); 
     //printGraph(G);
     PostorderNumb(G,node);
 
     vector<vector<int> > RG = reverseG(G);
     
-
+    cout<<"Strongly connected components : \n";
     for (int i=1;i<node.size();++i){
         if (!node[node[i]->order]->visited){
             finalDFSUtil(RG,node,node[i]->order);
