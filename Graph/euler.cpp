@@ -19,6 +19,7 @@ void printvec(vector<int>&v,int strt){
     }
     cout<<"\n";
 }
+
 void printGraph(vector<vector<int> >G){
     for (int i=1;i<G.size();++i)
         printvec(G[i],1);   
