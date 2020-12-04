@@ -200,7 +200,7 @@ class AVL
                 T =  rightR(T);
             }
 
-            // RR -> left right 
+            // RL -> left right 
             else if (load < -1 && loadf(T->rc)>0){
                 //cout<<"left right\n";
                 T->rc = rightR(T->rc);
