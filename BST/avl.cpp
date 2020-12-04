@@ -115,7 +115,7 @@ class AVL
                 T = rightR(T);
             }
 
-            // RR -> left right 
+            // RL -> left right 
             else if (load < -1 && k < T->rc->key){
                 T->rc = rightR(T->rc);
                 T = leftR(T);
