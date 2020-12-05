@@ -1,5 +1,3 @@
-// DSU Tree
-
 #include <iostream>
 #include <vector>
 #include <deque>
@@ -8,35 +6,48 @@
 
 using namespace std;
 
-class Node{
+class setNode{
 public:
 	int ht,par;
-	Node(){
+	setNode(){
 		par=-1; // self rooted 
 		ht = 0; // elements in subtree = 0
 	}
 };
 
-deque<Node> nodeCache;
 
-Node* newNode(){
-	nodeCache.push_back(Node());
-	Node* node = &nodeCache.back();
-	return node;
-}
-
-int Find(vector<Node*>&vec,int i){
+int Find(vector<setNode*>&vec,int i){
 	while(vec[i]->par!=-1){
 		i=vec[i]->par;
 	}
 	return i;
 }
 
-void Union(vector<Node*>&set,int i,int j){
+void Union(vector<setNode*>&set,int i,int j){
+	// merge set of j into i
+
+	int i_id = Find(set,i);
+	int j_id = Find(set,j);
+
+	// if same set
+	if (i_id == j_id) return;
+
+	// if height(tree of i) > height(tree of j)
+	// hang tree of j in
+	if (set[i_id]->ht>set[j_id]->ht){
+		set[j_id]->par = i_id;	
+	}
+	
+
+	else {
+		set[i_id]->par = j_id;
+		if(set[i_id]->ht==set[j_id]->ht)
+			set[j_id]->ht++;
+	}
 }
 
 
-void printparNht(vector<Node*> &vec)
+void printparNht(vector<setNode*> &vec)
 {
 	cout<<"Parent  : ";
 	for (int i=1;i<vec.size();++i){
@@ -56,10 +67,10 @@ int main(){
 	ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
 	int n;
 	cin>>n;
-	vector<Node*> set(n+1,NULL);
+	vector<setNode*> set(n+1,NULL);
 
 	for(int i=1;i<set.size();++i)
-		set[i] = newNode();
+		set[i] = new setNode();
 	
 	int u,v;
 	while(true)

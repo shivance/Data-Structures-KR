@@ -25,15 +25,15 @@ public:
     }
 
     //To heapify a subtree with root ar given index
-    void heapify(int i)
+     void heapify(int i)
     {
         int l = left(i);
         int r = right(i);
         int smallest = i;
 
-        if (l < heap_size && harr[l] < harr[i])
+        if (l < heap_size && harr[l] < harr[smallest])
             smallest = l;
-        if (r < heap_size && harr[r] < harr[i])
+        if (r < heap_size && harr[r] < harr[smallest])
             smallest = r;
 
         if (smallest != i)
