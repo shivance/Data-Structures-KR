@@ -33,26 +33,6 @@ int Find(vector<Node*>&vec,int i){
 }
 
 void Union(vector<Node*>&set,int i,int j){
-	// merge set of j into i
-
-	int i_id = Find(set,i);
-	int j_id = Find(set,j);
-
-	// if same set
-	if (i_id == j_id) return;
-
-	// if height(tree of i) > height(tree of j)
-	// hang tree of j in
-	if (set[i_id]->ht>set[j_id]->ht){
-		set[j_id]->par = i_id;	
-	}
-	
-
-	else {
-		set[i_id]->par = j_id;
-		if(set[i_id]->ht==set[j_id]->ht)
-			set[j_id]->ht++;
-	}
 }
 
 

@@ -1,10 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <list>
-#include <queue>
-#include <thread>
-#include <chrono>
-#include <climits>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -32,21 +26,28 @@ void addEdge(vector<list<lnode*> >&G, int u, int v,int wt)
 }
 
 
-void ExploreB(vector<list<lnode*> >&G,vector<bool>&visited,vector<int>&bfs,int v)
-{
+void updateGraph(vector<list<lnode*> >G,vector<int>&dist,vector<int>&prev_vertex,vector<bool>&visited,int src){
+    //vector<int>bfs = BFS(G, src,dist.size());
+    
     queue<int>q;
     
     list<lnode*>::iterator it;
 
     int k;
-    q.push(v);
-    visited[v]=true;
+    q.push(src);
+    visited[src]=true;
 
     while(!q.empty())
     {
         k = q.front();
-        bfs.push_back(k);
-        
+        //bfs.push_back(k);
+        for (it = G[k].begin();it!=G[k].end();++it)
+        {
+            if (dist[(*it)->v]>= dist[k]+(*it)->wt){
+                dist[(*it)->v] = dist[k]+(*it)->wt;
+                prev_vertex[(*it)->v] = k;
+            }
+        }
         q.pop();
 
         for (it = G[k].begin();it!=G[k].end();++it){
@@ -55,34 +56,7 @@ void ExploreB(vector<list<lnode*> >&G,vector<bool>&visited,vector<int>&bfs,int v
                 q.push((*it)->v);
             }
         }
-    }
-}
-
-vector<int> BFS(vector<list<lnode*> >&G, int v, int V)
-{
-    vector<bool> visited(V, false);
-    vector<int> bfs;
-    ExploreB(G, visited,bfs ,v);
-
-    return bfs;
-}
-
-
-void updateGraph(vector<list<lnode*> >G,vector<list<lnode*> >RG,vector<int>&dist,vector<int>&prev_vertex,int src){
-    vector<int>bfs = BFS(G, src,dist.size());
-    //printvec(bfs);
-    list<lnode*>::iterator it;
-
-    for (int i=0;i<bfs.size();++i){
-        //explore all child of bfs[i] and update -> curr = bfs[i]
-        for (it = G[bfs[i]].begin();it!=G[bfs[i]].end();++it)
-        {
-            if (dist[(*it)->v]>= dist[bfs[i]]+(*it)->wt){
-                dist[(*it)->v] = dist[bfs[i]]+(*it)->wt;
-                prev_vertex[(*it)->v] = bfs[i];
-            }
-        }
-    }
+    }        
 }
 
 void Path(vector<int>dist,vector<int>prev_vertex,int src,int dstn)
@@ -114,7 +88,7 @@ int main()
     int n, m;
     cin >> n >> m;
     vector<list<lnode*> > G(n + 1, list<lnode*>());
-    vector<list<lnode*> > RG(n + 1, list<lnode*>());
+    
     int u, v , wt;
 
     // n vertices
@@ -123,7 +97,6 @@ int main()
     {
         cin >> u >> v>> wt;
         addEdge(G, u, v, wt);
-        addEdge(RG, v, u, wt);
     }
 
     
@@ -141,7 +114,8 @@ int main()
 
         prev_vertex[src] = src;
         dist[src] = 0;
-        updateGraph(G,RG,dist,prev_vertex,src);
+        
+        updateGraph(G,dist,prev_vertex,visited,src);
 
     
         if (dist[dstn]==INT_MAX){
