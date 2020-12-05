@@ -43,10 +43,32 @@ public:
         int r = right(i);
         int smallest = i;
 
-        if (l < heap_size && harr[l]->wt <= harr[smallest]->wt)
-            smallest = l;
-        if (r < heap_size && harr[r]->wt <= harr[smallest]->wt)
-            smallest = r;
+        if (l < heap_size && harr[l]->wt <= harr[smallest]->wt){
+            if(harr[l]->wt==harr[smallest]->wt){
+                if(harr[l]->u<harr[smallest]->u)
+                    smallest = l;
+                else if (harr[l]->u==harr[smallest]->u){
+                    if (harr[l]->v<harr[smallest]->v)
+                        smallest = l;
+                }
+                
+            }
+            else
+                smallest = l;
+        }
+        if (r < heap_size && harr[r]->wt <= harr[smallest]->wt){
+            if(harr[r]->wt==harr[smallest]->wt){
+                if(harr[r]->u<harr[smallest]->u)
+                    smallest = r;
+                else if (harr[r]->u==harr[smallest]->u){
+                    if (harr[r]->v<harr[smallest]->v)
+                        smallest = r;
+                }
+                
+            }
+            else
+                smallest = r;
+        }
 
         if (smallest != i)
         {
@@ -242,6 +264,10 @@ int main(){
     Minheap H(m);
     ioGraph(G,H,m);
 
+    while(H.getsize()){
+        cout<<H.extractMin()->wt<<" ";
+    }
+    /*
     //DSU
     vector<setNode*> set(n+1,NULL);
 
@@ -273,20 +299,15 @@ int main(){
                 G[e->u][e->v]->flg =true;
                 G[e->v][e->u]->flg =true;
             }
-            Union(set,)
-
-            //cout<<"x\n";
-            //continue;
-        }
-        //else{
             
-        //}
+        }
+        
         
     }
 
     vector<bool>visit(n+1,false);
 
-    DFS(G,visit,hook);
+    DFS(G,visit,hook);*/
     
 
     return 0;
