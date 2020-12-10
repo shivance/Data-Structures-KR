@@ -150,58 +150,89 @@ public:
 
 };
 
-class setNode{
-public:
-    int ht,par;
-    setNode(){
-        par=-1; // self rooted 
-        ht = 0; // elements in subtree = 0
-    }
-};
-
-int Find(vector<setNode*>&vec,int i){
-    while(vec[i]->par!=-1){
-        i=vec[i]->par;
-    }
-    return i;
-}
-
-void Union(vector<setNode*>&set,int i,int j){
-    // merge set of j into i
-
-    int i_id = Find(set,i);
-    int j_id = Find(set,j);
-
-    // if same set
-    if (i_id == j_id) return;
-
-    // if height(tree of i) > height(tree of j)
-    // hang tree of j in
-    if (set[i_id]->ht>set[j_id]->ht){
-        set[j_id]->par = i_id;  
-    }
-    
-
-    else {
-        set[i_id]->par = j_id;
-        if(set[i_id]->ht==set[j_id]->ht)
-            set[j_id]->ht++;
-    }
-}
-
-
-void printparNht(vector<setNode*> &vec)
+class dsu
 {
-    cout<<"Parent  : ";
-    for (int i=1;i<vec.size();++i){
-        cout<<vec[i]->par<<" ";
-    }
-    cout<<"\nHeights : ";
-    for (int i=1;i<vec.size();++i){
-        cout<<vec[i]->ht<<" ";
-    }
-    cout<<"\n";
-}
+	class setNode
+		{
+		public:
+			int ht,par;
+			setNode(int i){
+				par = i; 
+				ht = 0; 
+			}
+		};
+
+	vector <setNode*> arr;
+	deque<setNode> nodeCache;
+
+	
+	public:
+	setNode* newNode(int d)
+	{
+	    nodeCache.push_back(setNode(d));
+	    setNode* node = &nodeCache.back();
+	    return node;
+	}
+
+	dsu(int n){
+		arr.resize(n+1,NULL);
+		for (int i=1;i<arr.size();++i)
+			arr[i] = newNode(i);
+	}
+
+	int Find(int i){
+		while(arr[i]->par!=i){
+			i=arr[i]->par;
+		}
+		return i;
+	}
+	
+	void Union(int i,int j){
+		int i_id = Find(i);
+		int j_id = Find(j);
+
+		if (i_id == j_id) return;
+		if (arr[i_id]->ht>arr[j_id]->ht){
+			arr[j_id]->par = i_id;	
+		}
+		
+		else {
+			arr[i_id]->par = j_id;
+			if(arr[i_id]->ht==arr[j_id]->ht)
+				arr[j_id]->ht++;
+		}
+	}
+
+	void printparNht()
+	{
+		cout<<"Parent  : ";
+		for (int i=1;i<arr.size();++i){
+			cout<<arr[i]->par<<" ";
+		}
+		cout<<"\nHeights : ";
+		for (int i=1;i<arr.size();++i){
+			cout<<arr[i]->ht<<" ";
+		}
+		cout<<"\n";
+	}
+
+	void printset(){
+		vector<vector<int> > v(arr.size(),vector<int>());
+
+		for (int i=1;i<arr.size();++i)
+			v[Find(i)].push_back(i);
+
+		for (int i=1;i<v.size();++i){
+			if (v[i].size()){
+				for (int j=0;j<v[i].size();++j)
+					cout<<v[i][j]<<" ";
+				cout<<"\n";
+			}
+		}
+		
+	}
+
+};
 
 
 class Gnode{
@@ -244,14 +275,16 @@ void ioGraph(vector<vector<Gnode*> >&mat,Minheap& H,int m){
 }
 
 
-void DFS(vector<vector<Gnode*> >G,vector<bool>&visit,int src)
+void DFS(vector<vector<Gnode*> >G,vector<bool>&visit,int src,int &wt)
 {
     visit[src] = true;
     cout<<src<<" ";
 
     for (int i=1;i<G.size();++i){
-        if (G[src][i] && !visit[i] && G[src][i]->flg)
+        if (G[src][i] && !visit[i] && G[src][i]->flg){
+            wt+=G[src][i]->wt;
             DFS(G,visit,i);
+        }
     }
 }
 
@@ -264,50 +297,24 @@ int main(){
     Minheap H(m);
     ioGraph(G,H,m);
 
-    while(H.getsize()){
-        cout<<H.extractMin()->wt<<" ";
-    }
-    /*
-    //DSU
-    vector<setNode*> set(n+1,NULL);
+    dsu s(n);
+    Edge* e;
+    int src = H.getMin()->u;
 
-    for(int i=1;i<set.size();++i)
-        set[i] = new setNode();
-
-    
-    Edge* hk = H.getMin();
-    int hook = H.getMin()->u;
-
-    Edge* e = H.extractMin();
-    G[e->u][e->v]->flg = true;
-    G[e->v][e->u]->flg = true;
-    
-    cout<<"Here\n";
-
-    int cnt = 0;
-    while(cnt<m-2 && H.getsize()>0){
+    int k=0;
+    while(H.getsize() && k<=n-1){
         e = H.extractMin();
-        int id1 = Find(set,e->v);
-        int id2 = Find(set,e->u);
-        if (id1!=id2 || id1==id2==-1){
-            cout<<"wt = "<<e->wt<<"\n";
-            
-            cout<<"ID of u "<<e->u<<" is "<<id1;
-            cout<<"\nID of v "<<e->v<<" is "<<id2<<"\n\n";
-            ++cnt;
-            if(G[e->u][e->v]){
-                G[e->u][e->v]->flg =true;
-                G[e->v][e->u]->flg =true;
-            }
-            
+        if (s.Find(e->u)!=s.Find(e->v)){
+            s.Union(e->u,e->v);
+            G[e->u][e->v]->flg = G[e->v][e->u]->flg = true;
+            ++k;
         }
-        
-        
     }
 
+    
     vector<bool>visit(n+1,false);
-
-    DFS(G,visit,hook);*/
+    int wt;
+    DFS(G,visit,src,wt);
     
 
     return 0;

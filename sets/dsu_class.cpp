@@ -3,7 +3,8 @@ using namespace std;
 
 # define fastIO ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 
-class sets
+
+class dsu
 {
 	class setNode
 		{
@@ -27,7 +28,9 @@ class sets
 	    return node;
 	}
 
-	sets(int n){
+
+
+	dsu(int n){
 		arr.resize(n+1,NULL);
 		for (int i=1;i<arr.size();++i)
 			arr[i] = newNode(i);
@@ -93,7 +96,9 @@ int main()
 	fastIO
 	int n;cin>>n;
 
-	sets s(n);
+
+	dsu s(n);
+
 	int u,v;
 	while(true)
 	{
