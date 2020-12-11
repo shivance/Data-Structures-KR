@@ -27,10 +27,8 @@ void addEdge(vector<list<lnode*> >&G, int u, int v,int wt)
 
 
 void updateGraph(vector<list<lnode*> >G,vector<int>&dist,vector<int>&prev_vertex,vector<bool>&visited,int src){
-    //vector<int>bfs = BFS(G, src,dist.size());
     
     queue<int>q;
-    
     list<lnode*>::iterator it;
 
     int k;
@@ -40,7 +38,7 @@ void updateGraph(vector<list<lnode*> >G,vector<int>&dist,vector<int>&prev_vertex
     while(!q.empty())
     {
         k = q.front();
-        //bfs.push_back(k);
+        
         for (it = G[k].begin();it!=G[k].end();++it)
         {
             if (dist[(*it)->v]>= dist[k]+(*it)->wt){

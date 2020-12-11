@@ -1,4 +1,6 @@
-//Kruskal
+// take arbitarary root
+// add root to list mark true
+// now loop through list find element with least edge weight ..mark this vertex as true and add to list...until list size is not equal to number of vertex
 
 #include <bits/stdc++.h>
 
@@ -14,6 +16,7 @@ public:
         this->wt = wt;
     }
 };
+
 
 class Minheap
 {
@@ -140,7 +143,6 @@ public:
 
     void printHeap()
     {
-        cout << "array\n";
         for (int j = 0; j < heap_size; ++j)
         {
             cout << harr[j]->wt << " ";
@@ -150,175 +152,71 @@ public:
 
 };
 
-class dsu
-{
-	class setNode
-		{
-		public:
-			int ht,par;
-			setNode(int i){
-				par = i; 
-				ht = 0; 
-			}
-		};
 
-	vector <setNode*> arr;
-	deque<setNode> nodeCache;
-
-	
-	public:
-	setNode* newNode(int d)
-	{
-	    nodeCache.push_back(setNode(d));
-	    setNode* node = &nodeCache.back();
-	    return node;
-	}
-
-	dsu(int n){
-		arr.resize(n+1,NULL);
-		for (int i=1;i<arr.size();++i)
-			arr[i] = newNode(i);
-	}
-
-	int Find(int i){
-		while(arr[i]->par!=i){
-			i=arr[i]->par;
-		}
-		return i;
-	}
-	
-	void Union(int i,int j){
-		int i_id = Find(i);
-		int j_id = Find(j);
-
-		if (i_id == j_id) return;
-		if (arr[i_id]->ht>arr[j_id]->ht){
-			arr[j_id]->par = i_id;	
-		}
-		
-		else {
-			arr[i_id]->par = j_id;
-			if(arr[i_id]->ht==arr[j_id]->ht)
-				arr[j_id]->ht++;
-		}
-	}
-
-	void printparNht()
-	{
-		cout<<"Parent  : ";
-		for (int i=1;i<arr.size();++i){
-			cout<<arr[i]->par<<" ";
-		}
-		cout<<"\nHeights : ";
-		for (int i=1;i<arr.size();++i){
-			cout<<arr[i]->ht<<" ";
-		}
-		cout<<"\n";
-	}
-
-	void printset(){
-		vector<vector<int> > v(arr.size(),vector<int>());
-
-		for (int i=1;i<arr.size();++i)
-			v[Find(i)].push_back(i);
-
-		for (int i=1;i<v.size();++i){
-			if (v[i].size()){
-				for (int j=0;j<v[i].size();++j)
-					cout<<v[i][j]<<" ";
-				cout<<"\n";
-			}
-		}
-		
-	}
-
-};
-
-
-class Gnode{
-public:
-    int wt;
-    bool flg;
-    Gnode(int wt){
-        this-> wt = wt;
-        flg = false;
-    }
-};
-
-
-void addEdge(vector<vector<Gnode*> >&G,int u,int v,int wt){
-    G[u][v] = new Gnode(wt);
-    G[v][u] = new Gnode(wt);
-}
-
-void printGraph(vector<vector<Gnode*> >&G){
-    for (int i=1;i<G.size();++i){
-        for (int j=1;j<G.size();++j){
-            if (G[i][j])
-                cout<<G[i][j]->flg<<" ";
-            else 
-                cout<<"x ";
-        }
-        cout<<"\n";
-    }
-}
-
-
-void ioGraph(vector<vector<Gnode*> >&mat,Minheap& H,int m){
+void ioGraph(vector<vector<int> >&G,int m){
     int u,v,wt;
     for (int i=0;i<m;++i){
         cin>>u>>v>>wt;
-        addEdge(mat,u,v,wt);
-        Edge* edge = new Edge(u,v,wt);
-        H.insertKey(edge);
+	    G[u][v] = wt;
+	    G[v][u] = wt;
+	    
     }
+    
 }
 
+int prim(vector<vector<int> >&G){
+	vector<bool>visited(G.size(),false);
+	int n = G.size()-1;
+	Minheap H(n*(n-1)/2);
 
-void DFS(vector<vector<Gnode*> >G,vector<bool>&visit,int src,int &wt)
-{
-    visit[src] = true;
-    //cout<<src<<" ";
+	int u =1;
+	Edge* e = NULL;
+	int wt = 0;
+	int cnt = 0;
+	
+	while(1){
+		visited[u]=true;
+		if (e!=NULL) wt+=e->wt;
+		
+		++cnt;
+        if (cnt==G.size()-1) break;
 
-    for (int i=1;i<G.size();++i){
-        if (G[src][i] && !visit[i] && G[src][i]->flg){
-            wt+=G[src][i]->wt;
-            DFS(G,visit,i,wt);
+		for (int i=1;i<G.size();++i){
+			if (!visited[i] && G[u][i]!=INT_MAX && G[u][i]!=0){
+				Edge* ed = new Edge(u,i,G[u][i]);
+				H.insertKey(ed);
+			}
+		}
+
+        while(1){
+		  e = H.extractMin();
+          if (!visited[e->v]){ 
+            u = e->v;
+            break;
+          }  
         }
-    }
+		
+	}
+
+	return wt;
 }
+
 
 int main(){
+	int n,m;
+	cin>>n>>m;
+	vector<vector<int> >G(n+1,vector<int> (n+1,INT_MAX));
 
-    int n,m;//no of vertex
-    cin>>n>>m;
-    
-    vector<vector<Gnode*> > G(n+1,vector<Gnode*>(n+1,NULL));
-    Minheap H(m);
-    ioGraph(G,H,m);
+	for (int i=1;i<G.size();++i)
+		G[i][i] = 0;
+	
 
-    dsu s(n);
-    Edge* e;
-    int src = H.getMin()->u;
+	ioGraph(G,m);
+	cout<<prim(G)<<"\n";
 
-    int k=0;
-    while(H.getsize() && k<=n-1){
-        e = H.extractMin();
-        if (s.Find(e->u)!=s.Find(e->v)){
-            s.Union(e->u,e->v);
-            G[e->u][e->v]->flg = G[e->v][e->u]->flg = true;
-            ++k;
-        }
-    }
-
-    
-    vector<bool>visit(n+1,false);
-    int wt;
-    DFS(G,visit,src,wt);
-    cout<<wt<<"\n";
-
-    return 0;
+	return 0;
 }
+
 
 /*
 9 14

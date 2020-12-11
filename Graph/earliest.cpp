@@ -31,21 +31,27 @@ void addEdge(vector<list<lnode*> >&G, int u, int v,float wt)
 }
 
 
-float early(vector<list<lnode*> >&RG,int v){
-    if(RG[v].size()==0)
+float early(vector<list<lnode*> >&RG,vector<float>&DP,int v){
+    if(RG[v].size()==0){
+        DP[v]=0;
         return 0;
+    }
 
     float k = -10.0;
     list<lnode*>::iterator it;
     for (it = RG[v].begin();it!=RG[v].end();++it){
-        k = fmax(k,(*it)->wt+early(RG,(*it)->v));
+        if (DP[(*it)->v]==-10.0){
+            k = fmax(k,(*it)->wt+early(RG,DP,(*it)->v));
+        }
+        else{
+            k = fmax(k,(*it)->wt+DP[(*it)->v]);
+        }
     }
-    //cout<<v<<" max = "<<k<<" returned\n";
+    
+    //memoization	
+    DP[v] = k;
     return k;
 }
-
-
-
 
 int main()
 {
@@ -64,6 +70,9 @@ int main()
     //m number of u and v --> m edge
 
     //vertex weighted graph
+
+    vector<float> DP(n+1,-10.0);
+
     float dstn_wt;
     for (int i = 1; i <= n; ++i)
     {
@@ -81,7 +90,7 @@ int main()
     }
     //destination is 7
     
-    cout<<early(RG,n)+dstn_wt<<"\n";
+    cout<<early(RG,DP,n)+dstn_wt<<"\n";
     // construct only reverse DAG
 
     
