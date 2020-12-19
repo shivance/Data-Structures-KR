@@ -25,7 +25,7 @@ public:
     }
 
     //To heapify a subtree with root ar given index
-     void heapify(int i)
+    void heapify(int i)
     {
         int l = left(i);
         int r = right(i);

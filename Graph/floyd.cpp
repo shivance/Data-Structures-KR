@@ -29,6 +29,7 @@ void ioGraph(vector<vector<ele*> >&G,int m){
         G[u][v]->v[0] = wt;
     }
     
+    // zero all diagonal elements => no self edge
     for (int i=1;i<G.size();++i){
     	G[i][i]->v[0] = 0;
     }
@@ -42,12 +43,15 @@ void floyd(vector<vector<ele*> >&G){
 				if (i==j) 
 					G[i][j]->v[k] = 0;
 
+                // k is terminal vertex here not intermediate 
 				else if (i==k || j==k) 
 					G[i][j]->v[k]=G[i][j]->v[k-1];
 
+                // if edge src->k or k->dstn does not exist
 				else if (G[i][k]->v[k-1]==INT_MAX || G[k][j]->v[k-1]==INT_MAX)
 					G[i][j]->v[k]=G[i][j]->v[k-1];
 				
+                // update if cost of path is less with k as intermediate vertex
 				else if (G[i][k]->v[k-1]+G[k][j]->v[k-1] < G[i][j]->v[k-1])
 					G[i][j]->v[k] = G[i][k]->v[k-1]+G[k][j]->v[k-1];
 				
