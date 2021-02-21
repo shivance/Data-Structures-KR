@@ -35,7 +35,7 @@ void printGraph(vector<list<lnode*> > &G)
     }
 }
 
-int ExploreMst(vector<list<lnode*> >&G,vector<bool> visited,int v){
+int ExploreMst(vector<list<lnode*> >&G,vector<bool>&visited,int v){
     //if (visited[v]) return 0;
 
     visited[v] = true;
